@@ -10,7 +10,8 @@
 // ╔══════════════════════════════════════════════════╗
 // ║  CONFIGURATION — Edit these two values only      ║
 // ╚══════════════════════════════════════════════════╝
-const OWNER_PIN        = '93153';
+// ⚠️ PINs removed from HTML — authenticated server-side via Apps Script.
+// Nobody reading this source code can find any PIN.
 const SUPPORT_PHONE    = '+91 92926 52566'; // ← Change to your support number
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxlptm6iAd3Z_Ym8CvlRvKjQI_5kRazi7uBqCi_oQXyJyd9dphuKyx7-Wp-3G9lAZLhvA/exec';
 // Paste your Apps Script web app URL above ↑
@@ -462,11 +463,11 @@ canvas{width:100%!important;display:block;}
       <div class="rb sel" id="rbC" onclick="selRole('cashier')"><span class="ri">🧾</span><div class="rl">Cashier</div><div class="rs">Data entry</div></div>
       <div class="rb" id="rbO" onclick="selRole('owner')"><span class="ri">👑</span><div class="rl">Owner</div><div class="rs">Full access</div></div>
     </div>
-    <div class="pin-row" id="pinRow" style="display:none">
-      <label>Owner PIN</label>
+    <div class="pin-row" id="pinRow">
+      <label id="pinLabel">Cashier PIN</label>
       <input type="password" class="pin-inp" id="pinInp" maxlength="5" placeholder="•••••" oninput="this.value=this.value.replace(/\D/g,'')">
     </div>
-    <button class="login-btn" onclick="doLogin()">Enter Sheet →</button>
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">Enter Sheet →</button>
     <div class="lerr" id="lerr"></div>
   </div>
 </div>
@@ -919,25 +920,108 @@ let isToday=true;
 function todayStr(){ return new Date().toISOString().split('T')[0]; }
 
 // ══════════════════════════════════════════
-// LOGIN
+// LOGIN — Server-Side PIN Auth + Session Cache
 // ══════════════════════════════════════════
+const SESSION_MINUTES = 120; // 2 hrs — change to 60 for tighter security
+
 function selRole(r){
   currentRole=r;
   document.getElementById('rbC').classList.toggle('sel',r==='cashier');
   document.getElementById('rbO').classList.toggle('sel',r==='owner');
-  document.getElementById('pinRow').style.display=r==='owner'?'block':'none';
+  document.getElementById('pinLabel').textContent=r==='owner'?'Owner PIN':'Cashier PIN';
+  document.getElementById('pinInp').value='';
   document.getElementById('lerr').textContent='';
+  document.getElementById('pinInp').focus();
 }
-function doLogin(){
-  if(currentRole==='owner'&&document.getElementById('pinInp').value!==OWNER_PIN){
-    document.getElementById('lerr').textContent='❌ Wrong PIN — try again'; return;
-  }
+
+function enterApp(){
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('app').className='visible';
   document.getElementById('appFooter').style.display='block';
   initApp();
+
 }
+
+async function doLogin(){
+  const pin=document.getElementById('pinInp').value.trim();
+  if(!pin){
+    document.getElementById('lerr').textContent='❌ Please enter your PIN'; return;
+  }
+  if(!GOOGLE_SCRIPT_URL||GOOGLE_SCRIPT_URL.includes('YOUR_SCRIPT')){
+    document.getElementById('lerr').textContent='❌ Google Script URL not configured'; return;
+  }
+
+  // Show loading state
+  const btn=document.getElementById('loginBtn');
+//  const origTxt=btn.textContent;
+  btn.textContent='Verifying…';btn.disabled=true;
+  document.getElementById('lerr').textContent='';
+
+  try{
+    const resp=await fetch(
+      GOOGLE_SCRIPT_URL+'?action=auth&role='+currentRole+'&pin='+encodeURIComponent(pin),
+      {signal:AbortSignal.timeout(8000)}
+    );
+    const result=await resp.json();
+
+    if(result.status==='ok'&&result.authenticated){
+      // ✅ Cache so next refresh skips server call entirely
+       sessionStorage.setItem('csrAuth',JSON.stringify({role:currentRole,at:Date.now()}));
+       sessionStorage.setItem('csrTabAlive','1');
+      enterApp();
+    } else {
+      document.getElementById('lerr').textContent='❌ Wrong PIN — try again';
+      document.getElementById('pinInp').value='';
+      document.getElementById('pinInp').focus();
+    }
+  }catch(e){
+    document.getElementById('lerr').textContent='❌ Could not reach server. Check your internet connection.';
+  }finally{
+    // btn.textContent=origTxt; 
+    btn.textContent='Enter Sheet →'; btn.disabled=false;
+  }
+}
+
+/*
 function logout(){ if(confirm('Logout?')) location.reload(); }
+document.addEventListener('keydown',e=>{
+  if(document.getElementById('loginScreen').style.display!=='none'&&e.key==='Enter') doLogin();
+});
+*/
+
+function logout(){
+  if(confirm('Logout?')){
+    sessionStorage.removeItem('csrAuth');
+    location.reload();
+  }
+}
+
+// ── Auto-restore session on page refresh ──
+(function(){
+  try{
+    // Step 1: Immediately clear the alive flag on any page load
+    const tabAlive=sessionStorage.getItem('csrTabAlive');
+    const cached=JSON.parse(sessionStorage.getItem('csrAuth')||'null');
+    if(tabAlive&&cached&&cached.role&&cached.at){
+        const ageMin=(Date.now()-cached.at)/60000;
+        if(ageMin<SESSION_MINUTES){
+        // Step 2: Re-arm the flag — only happens during active session restore
+        sessionStorage.setItem('csrTabAlive','1');
+        currentRole=cached.role;
+        // Skip login entirely — restore directly
+        if(document.readyState==='loading'){
+          document.addEventListener('DOMContentLoaded',enterApp,{once:true});
+        } else {
+          enterApp();
+        }
+        return;
+      }
+    }
+    // No valid session — show PIN field immediately for default role (cashier)
+    selRole('cashier');
+  }catch(e){ selRole('cashier'); }
+})();
+
 document.addEventListener('keydown',e=>{
   if(document.getElementById('loginScreen').style.display!=='none'&&e.key==='Enter') doLogin();
 });
@@ -1708,9 +1792,11 @@ async function loadAnalytics(){
       const tSales=(parseFloat(sv.cashColl)||0)+(parseFloat(sv.upiColl)||0);
       const tFree=parseFloat(sv.freeBill||sv.cashSpent)||0;
       const net=tSales-tPur-tSal-tFree;
+      const tPend=(d.pendingBills||[]).reduce((a,r)=>a+(parseFloat(r.amount)||0),0);
       dayData.push({date,tPur,tSales,tSal,tFree,net,
         tUPI:tPurUPI+tSalUPI,tCC:tPurCC+tSalCC,tCSR:tPurCSR+tSalCSR,
-        tPurUPI,tPurCC,tPurCSR,itemSpend,roleSpend});
+        tPurUPI,tPurCC,tPurCSR,itemSpend,roleSpend,
+        pendingBills:(d.pendingBills||[]).filter(r=>r.name||r.amount),tPend});
     }catch(e){}
   });
 
@@ -1818,6 +1904,60 @@ function renderAnalytics(days,from,to){
         </tr></tfoot>
       </table></div>
     </div>
+
+    ${(()=>{
+      // ── PENDING BILLS LOG ──────────────────────────────
+      const allPB=[];
+      days.forEach(d=>(d.pendingBills||[]).forEach(r=>{
+        if(r.name||r.amount) allPB.push({...r,date:d.date});
+      }));
+      if(!allPB.length) return `
+        <div class="dlog">
+          <div class="dlog-hd"><h4>⚠️ Pending Bills Log</h4><p>No pending bills recorded in this period</p></div>
+          <div style="padding:20px 18px;font-size:12px;color:var(--muted)">— No pending bills found for selected date range —</div>
+        </div>`;
+
+      const grandTotal=allPB.reduce((a,r)=>a+(parseFloat(r.amount)||0),0);
+      const f2=v=>v?(parseFloat(v)||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}):'—';
+
+      return `
+        <div class="dlog">
+          <div class="dlog-hd" style="display:flex;align-items:center;justify-content:space-between;padding-bottom:12px">
+            <div>
+              <h4>⚠️ Pending Bills Log</h4>
+              <p>${allPB.length} bill${allPB.length!==1?'s':''} · across ${new Set(allPB.map(r=>r.date)).size} day${new Set(allPB.map(r=>r.date)).size!==1?'s':''} · Total outstanding: <strong style="color:#F59E0B">₹${f2(grandTotal)}</strong></p>
+            </div>
+          </div>
+          <div class="tab-wrap"><table>
+            <thead><tr>
+              <th class="th-b" style="text-align:left;min-width:90px">Date</th>
+              <th class="th-b" style="width:36px">Day</th>
+              <th class="th-b" style="text-align:left;min-width:110px">Name</th>
+              <th class="th-b" style="text-align:left;min-width:80px">Role</th>
+              <th class="th-b" style="text-align:left;min-width:110px">Customer</th>
+              <th class="th-b" style="text-align:center;min-width:110px">Phone</th>
+              <th class="th-b" style="text-align:center;min-width:70px">Bill No</th>
+              <th class="th-t" style="min-width:90px">Amount ₹</th>
+            </tr></thead>
+            <tbody>
+              ${allPB.map(r=>`<tr>
+                <td style="font-family:'DM Mono',monospace;font-size:11px;font-weight:700;color:var(--accent)">${r.date}</td>
+                <td style="font-size:10px;color:var(--muted);text-align:center">${new Date(r.date+'T00:00:00').toLocaleDateString('en-IN',{weekday:'short'})}</td>
+                <td style="text-align:left;font-weight:600">${r.name||'—'}</td>
+                <td style="text-align:left;font-size:11px;color:var(--muted)">${r.role||'—'}</td>
+                <td style="text-align:left;font-size:11px">${r.customer||'—'}</td>
+                <td style="text-align:center;font-family:'DM Mono',monospace;font-size:11px">${r.phone||'—'}</td>
+                <td style="text-align:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--accent)">${r.billNo||'—'}</td>
+                <td class="nc-bold" style="color:#FCA5A5">₹${f2(r.amount)}</td>
+              </tr>`).join('')}
+            </tbody>
+            <tfoot><tr style="background:var(--tfoot)">
+              <td colspan="7" style="color:var(--gold);font-weight:800;font-size:11px;padding:8px 12px">TOTAL OUTSTANDING (${allPB.length} bills)</td>
+              <td class="nc-bold" style="color:#FCA5A5;padding:8px">₹${f2(grandTotal)}</td>
+            </tr></tfoot>
+          </table></div>
+        </div>`;
+    })()}
   `;
 
   requestAnimationFrame(()=>{
