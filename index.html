@@ -423,15 +423,15 @@ canvas{width:100%!important;display:block;}
 .fc-blue{background:rgba(59,130,246,.1);color:#3B82F6;border-color:rgba(59,130,246,.25);}
 .fc-purple{background:rgba(139,92,246,.1);color:#7C3AED;border-color:rgba(139,92,246,.25);}
 .fc-teal{background:rgba(20,184,166,.1);color:#0D9488;border-color:rgba(20,184,166,.25);}
-.fl-sep{color:var(--border2);font-size:14px;font-weight:300;line-height:1;}
+.fl-sep{color:var(--text);font-size:15px;font-weight:600;line-height:1;opacity:.9;}
 .fl-eq{font-size:11px;color:var(--muted);font-weight:700;padding:0 2px;}
 
 /* ══ RESPONSIVE TABLE IMPROVEMENTS ══ */
 .tab-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:0 0 10px 10px;}
 .tab-wrap table{width:100%;min-width:600px;border-collapse:collapse;font-size:11.5px;}
 .tab-wrap thead th{padding:7px 9px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;text-align:center;border-right:1px solid rgba(255,255,255,.07);white-space:nowrap;position:sticky;top:0;}
-.tab-wrap td{padding:5px 8px;vertical-align:middle;border-right:1px solid var(--border);text-align:center;white-space:nowrap;}
-.tab-wrap td:first-child{text-align:left;}
+.tab-wrap td{padding:4px 5px;vertical-align:middle;border-right:1px solid var(--border);text-align:center;white-space:nowrap;}
+.tab-wrap td:first-child{text-align:left;padding-left:8px;}
 .tab-wrap td:last-child,.tab-wrap th:last-child{border-right:none;}
 .tab-wrap tbody tr:nth-child(even) td{background:var(--row-alt);}
 .tab-wrap tbody tr:hover td{background:var(--row-hover)!important;}
@@ -512,9 +512,10 @@ canvas{width:100%!important;display:block;}
 
       <!-- Quick bar -->
       <div class="quick-bar">
-        <div class="qb c1"><div class="qb-lbl">Purchases</div><div class="qb-val">₹<span id="qb_pur">0.00</span></div></div>
         <div class="qb c2"><div class="qb-lbl">Collection</div><div class="qb-val">₹<span id="qb_col">0.00</span></div></div>
+        <div class="qb c1"><div class="qb-lbl">Purchases</div><div class="qb-val">₹<span id="qb_pur">0.00</span></div></div>
         <div class="qb c3"><div class="qb-lbl">Salaries</div><div class="qb-val">₹<span id="qb_sal">0.00</span></div></div>
+        <div class="qb c1"><div class="qb-lbl">Total Usage</div><div class="qb-val">₹<span id="qb_usage">0.00</span></div></div>
         <div class="qb c4r" style="cursor:pointer" onclick="document.getElementById('pendingBillsAnchor').scrollIntoView({behavior:'smooth'})"><div class="qb-lbl">⚠️ Pending Bills</div><div class="qb-val">₹<span id="qb_pend">0.00</span></div></div>
         <div class="qb c4" id="qb4"><div class="qb-lbl" id="qb4_lbl">Net Profit</div><div class="qb-val">₹<span id="qb_net">0.00</span></div></div>
       </div>
@@ -548,7 +549,6 @@ canvas{width:100%!important;display:block;}
                 <th class="th-b" style="width:78px">Subtotal ₹</th>
                 <th class="th-u" style="width:80px">📱 UPI<br><small style="font-size:8px">PhonePay</small></th>
                 <th class="th-c" style="width:80px">💵 Counter<br><small style="font-size:8px">Cash CC</small></th>
-                <th class="th-s" style="width:80px">👤 CSR<br><small style="font-size:8px">Suresh</small></th>
                 <th class="th-t" style="width:80px">Row Total ₹</th>
                 <th class="th-b" style="width:34px"></th>
               </tr></thead>
@@ -557,7 +557,6 @@ canvas{width:100%!important;display:block;}
                 <td colspan="6" class="ft-l">Column Totals / మొత్తం</td>
                 <td class="ft-u" id="ctUPI">0.00</td>
                 <td class="ft-c"  id="ctCC">0.00</td>
-                <td class="ft-s" id="ctCSR">0.00</td>
                 <td class="ft-t" id="ctAll">0.00</td>
                 <td></td>
               </tr></tfoot>
@@ -581,13 +580,6 @@ canvas{width:100%!important;display:block;}
             <div><div class="st-lbl">Total Collection (Cash + UPI)</div><div class="st-sub" id="salBreak">Cash: ₹0 + UPI: ₹0</div></div>
             <div class="st-val">₹<span id="totalSales">0.00</span></div>
           </div>
-          <div class="sheet-div" style="margin:10px 0 8px"></div>
-          <div class="sec-hd" style="margin-bottom:6px"><h3 style="font-size:13px;opacity:.85">🌅 Opening Balances <small style="font-size:10px;opacity:.6">(Yesterday's closing — enter each morning)</small></h3></div>
-          <div class="sales-grid">
-            <div class="sf upi"><label>📱 Opening UPI ₹</label><input type="number" id="openUPI" placeholder="0.00" min="0" oninput="calcSales()" readonly></div>
-            <div class="sf cash"><label>💵 Opening CC ₹ <small style="font-size:9px;opacity:.7">(Counter Cash)</small></label><input type="number" id="openCC" placeholder="0.00" min="0" oninput="calcSales()" readonly></div>
-            <div class="sf spent"><label>👤 Opening CSR ₹ <small style="font-size:9px;opacity:.7">(Suresh)</small></label><input type="number" id="openCSR" placeholder="0.00" min="0" oninput="calcSales()" readonly></div>
-          </div>
 
           <div class="sheet-div"></div>
 
@@ -604,7 +596,6 @@ canvas{width:100%!important;display:block;}
                   <th class="th-b" style="width:80px">Subtotal ₹</th>
                   <th class="th-u" style="width:80px">📱 UPI<br><small style="font-size:8px">PhonePay</small></th>
                   <th class="th-c" style="width:80px">💵 Counter<br><small style="font-size:8px">Cash CC</small></th>
-                  <th class="th-s" style="width:80px">👤 CSR<br><small style="font-size:8px">Suresh</small></th>
                   <th class="th-t" style="width:80px">Total Paid ₹</th>
                   <th class="th-b" style="width:34px"></th>
                 </tr></thead>
@@ -614,7 +605,6 @@ canvas{width:100%!important;display:block;}
                   <td class="ft-l" id="stSub" style="color:#A8C8FF!important;font-size:13px!important;">0.00</td>
                   <td class="ft-u" id="stUPI">0.00</td>
                   <td class="ft-c"  id="stCC">0.00</td>
-                  <td class="ft-s" id="stCSR">0.00</td>
                   <td class="ft-t" id="stAll">0.00</td>
                   <td></td>
                 </tr></tfoot>
@@ -676,6 +666,7 @@ canvas{width:100%!important;display:block;}
             <div class="kpi ks"><div class="kl">Total Sales</div><div class="kv">₹<span id="op_s">0.00</span></div><div class="ktrend" id="op_s_sub">—</div></div>
             <div class="kpi kp"><div class="kl">Total Purchases</div><div class="kv">₹<span id="op_p">0.00</span></div><div class="ktrend">All payment modes</div></div>
             <div class="kpi kw"><div class="kl">Staff Salaries</div><div class="kv">₹<span id="op_w">0.00</span></div><div class="ktrend" id="op_w_cnt">0 staff</div></div>
+            <div class="kpi kp"><div class="kl">Total Usage</div><div class="kv">₹<span id="op_usage">0.00</span></div><div class="ktrend">Purchases + Salaries</div></div>
             <div class="kpi kw"><div class="kl">Free Bill</div><div class="kv">₹<span id="op_fb">0.00</span></div><div class="ktrend">Complimentary</div></div>
             <div class="kpi kw"><div class="kl">Pending Bills</div><div class="kv">₹<span id="op_pend">0.00</span></div><div class="ktrend" id="op_pend_cnt">0 bills</div></div>
             <div class="kpi kn" id="kpiNet"><div class="kl" id="op_net_lbl">Net Profit</div><div class="kv">₹<span id="op_net">0.00</span></div><div class="ktrend" id="op_net_sub">—</div></div>
@@ -720,7 +711,7 @@ canvas{width:100%!important;display:block;}
         <span class="fl-sep">−</span>
         <span class="formula-chip fc-purple">Free Bill</span>
         <span class="fl-sep" style="margin-left:8px;color:var(--muted);font-size:9px">│</span>
-        <span class="fl-label" style="margin-left:4px">UPI/CC/CSR =</span>
+        <span class="fl-label" style="margin-left:4px">UPI/CC =</span>
         <span class="formula-chip fc-blue">Purchases paid per mode + Salaries paid per mode</span>
       </div>
       <div id="analyticsContent">
@@ -747,7 +738,7 @@ canvas{width:100%!important;display:block;}
       </div>
       <div class="formula-legend" style="border-radius:10px;margin-bottom:14px;border:1px solid var(--border);">
         <span class="fl-label">📐 Row Total =</span>
-        <span class="formula-chip fc-blue">UPI + CC + CSR</span>
+        <span class="formula-chip fc-blue">UPI + CC</span>
         <span class="fl-sep">or if blank →</span>
         <span class="formula-chip fc-orange">Qty × Rate</span>
         <span class="fl-sep" style="margin-left:8px;color:var(--muted);font-size:9px">│</span>
@@ -801,7 +792,7 @@ canvas{width:100%!important;display:block;}
   <div class="page-view" id="pageFinance">
     <div class="page">
       <div class="dash-hd">
-        <div><h2>🏦 Finance Tracker</h2><p>Day-wise opening balance → usage → closing balance across UPI / CC / CSR — Owner View</p></div>
+        <div><h2>🏦 Finance Tracker</h2><p>Auto-calculated running balances per payment mode — Owner View</p></div>
         <div class="dash-ctrls">
           <div class="pick-grp"><label>View</label>
             <select class="month-pick" id="financeView">
@@ -815,15 +806,15 @@ canvas{width:100%!important;display:block;}
         </div>
       </div>
       <div class="formula-legend" style="border-radius:10px;margin-bottom:16px;border:1px solid var(--border);flex-wrap:wrap;gap:6px 12px;">
-        <span class="fl-label">📐 Finance Formula:</span>
-        <span class="formula-chip fc-blue">Opening Balance</span>
+        <span class="fl-label">📐 Balance =</span>
+        <span class="formula-chip fc-blue">Opening</span>
+        <span class="fl-sep">+</span>
+        <span class="formula-chip fc-green">Collection (Cash/UPI)</span>
         <span class="fl-sep">−</span>
-        <span class="formula-chip fc-orange">Used (Purchases + Salaries per mode)</span>
-        <span class="fl-sep">=</span>
-        <span class="formula-chip fc-teal">Closing Balance</span>
-        <div style="width:100%;height:0;"></div>
-        <span class="fl-label" style="font-size:8px;opacity:.7">ℹ️</span>
-        <span style="font-size:10px;color:var(--muted)">Opening = yesterday's closing carried forward each morning. Today's sales are <strong>NOT</strong> added — they become next day's opening.</span>
+        <span class="formula-chip fc-orange">Usage (Purchases+Salaries per mode)</span>
+        <span class="fl-sep" style="margin:0 4px">│</span>
+        <span class="fl-label">Next day Opening =</span>
+        <span class="formula-chip fc-teal">Today's Closing Balance</span>
       </div>
       <div id="financeContent">
         <div class="no-data"><div class="nd-ico">🏦</div><h3>Select a date range and load</h3></div>
@@ -865,7 +856,12 @@ function toggleTheme(){
   document.getElementById('themeKnob').textContent = theme==='warm'?'🌞':'🌙';
   localStorage.setItem('csrTheme', theme);
   toast(theme==='warm'?'🌞 Warm theme':'🌙 Dark theme');
-  if(currentTab==='analytics') loadAnalytics();
+  if(currentTab==='analytics'&&window._lastAnalyticsDays?.length){
+      const days=window._lastAnalyticsDays;
+      const tUPI=days.reduce((a,d)=>a+d.tUPI,0),tCC=days.reduce((a,d)=>a+d.tCC,0);
+      const totPur=days.reduce((a,d)=>a+d.tPur,0),totSal=days.reduce((a,d)=>a+d.tSal,0);
+      requestAnimationFrame(()=>{drawRevExp(days);drawNet(days);drawDonut(tUPI,tCC,totPur);drawCat(totPur,totSal,days.reduce((a,d)=>a+(d.tFree||0),0));});
+  }
 }
 document.getElementById('themeKnob').textContent = theme==='warm'?'🌞':'🌙';
 
@@ -1199,7 +1195,7 @@ function onItemSel(s){
 function ro(v){ return editMode?'':' readonly'; } // helper
 
 function addPurchaseRow(data){
-  data=data||{en:'',qty:'',unit:'',rate:'',upi:'',cc:'',csr:''};
+  data=data||{en:'',qty:'',unit:'',rate:'',upi:'',cc:''};
   const n=document.querySelectorAll('#pTbody tr').length;
   const tr=document.createElement('tr');
   const ro_=editMode?'':'readonly';
@@ -1212,7 +1208,6 @@ function addPurchaseRow(data){
     <td><span class="cv sub-v">0.00</span></td>
     <td class="td-u"><input class="ci upi-c" type="number" value="${data.upi||''}" placeholder="0.00" min="0" step="0.5" ${ro_} oninput="calcTotals()"></td>
     <td class="td-c"><input class="ci cc-c" type="number" value="${data.cc||''}" placeholder="0.00" min="0" step="0.5" ${ro_} oninput="calcTotals()"></td>
-    <td class="td-s"><input class="ci csr-c" type="number" value="${data.csr||''}" placeholder="0.00" min="0" step="0.5" ${ro_} oninput="calcTotals()"></td>
     <td class="td-t"><span class="cv row-v">0.00</span></td>
     <td><button class="del-btn" onclick="delPRow(this)" ${editMode?'':'disabled'}>✕</button></td>
   `;
@@ -1225,20 +1220,20 @@ function calcRow(inp){
   const qty=parseFloat(tr.querySelector('.qty-c').value)||0,rt=parseFloat(tr.querySelector('.rate-c').value)||0;
   const sub=qty*rt;
   tr.querySelector('.sub-v').textContent=sub.toFixed(2);
-  const upi=parseFloat(tr.querySelector('.upi-c').value)||0,cc=parseFloat(tr.querySelector('.cc-c').value)||0,csr=parseFloat(tr.querySelector('.csr-c').value)||0;
-  tr.querySelector('.row-v').textContent=((upi+cc+csr)||sub).toFixed(2);
+  const upi=parseFloat(tr.querySelector('.upi-c').value)||0,cc=parseFloat(tr.querySelector('.cc-c').value)||0;
+  tr.querySelector('.row-v').textContent=((upi+cc)||sub).toFixed(2);
   calcTotals();
 }
 function calcTotals(){
-  let tU=0,tC=0,tS=0,tA=0;
+  let tU=0,tC=0,tA=0;
   document.querySelectorAll('#pTbody tr').forEach(tr=>{
     const qty=parseFloat(tr.querySelector('.qty-c')?.value)||0,rt=parseFloat(tr.querySelector('.rate-c')?.value)||0;
-    const upi=parseFloat(tr.querySelector('.upi-c')?.value)||0,cc=parseFloat(tr.querySelector('.cc-c')?.value)||0,csr=parseFloat(tr.querySelector('.csr-c')?.value)||0;
-    const rowTot=(upi+cc+csr)||(qty*rt);
+    const upi=parseFloat(tr.querySelector('.upi-c')?.value)||0,cc=parseFloat(tr.querySelector('.cc-c')?.value)||0;
+    const rowTot=(upi+cc)||(qty*rt);
     tr.querySelector('.row-v').textContent=rowTot.toFixed(2);
-    tU+=upi;tC+=cc;tS+=csr;tA+=rowTot;
+    tU+=upi;tC+=cc;tA+=rowTot;
   });
-  set('ctUPI',tU);set('ctCC',tC);set('ctCSR',tS);set('ctAll',tA);set('purMeta',tA);set('qb_pur',tA);
+  set('ctUPI',tU);set('ctCC',tC);set('ctAll',tA);set('purMeta',tA);set('qb_pur',tA);
   updateOwner();
 }
 function delPRow(btn){btn.closest('tr').remove();renum();calcTotals();}
@@ -1253,12 +1248,8 @@ function calcSales(){
   const free=parseFloat(document.getElementById('freeBill').value)||0;
   const tot=cash+upi;
   set('totalSales',tot);set('salMeta',tot);set('qb_col',tot);
-  const oUPI=parseFloat(document.getElementById('openUPI').value)||0;
-  const oCC=parseFloat(document.getElementById('openCC').value)||0;
-  const oCSR=parseFloat(document.getElementById('openCSR').value)||0;
-  const openTot=oUPI+oCC+oCSR;
   document.getElementById('salBreak').textContent=
-    `Cash:₹${cash.toFixed(0)} + UPI:₹${upi.toFixed(0)} | Free:₹${free.toFixed(0)} | Opening:₹${openTot.toFixed(0)}`;
+    `Cash:₹${cash.toFixed(0)} + UPI:₹${upi.toFixed(0)} | Free:₹${free.toFixed(0)}`;
   updateOwner();
 }
 
@@ -1274,7 +1265,7 @@ function buildRoleDrop(sel,idx){
 }
 
 function addStaffRow(data,i){
-  data=data||{name:'',role:'',qty:'1',salary:'',upi:'',cc:'',csr:''};
+  data=data||{name:'',role:'',qty:'1',salary:'',upi:'',cc:''};
   const tr=document.createElement('tr');
   const ro_=editMode?'':'readonly';
   const idx=i;
@@ -1286,7 +1277,6 @@ function addStaffRow(data,i){
     <td><span class="cv ssub-v">0.00</span></td>
     <td class="td-u"><input class="ci supi-c" type="number" value="${data.upi||''}" placeholder="0.00" min="0" ${ro_} oninput="staffList[${idx}].upi=this.value;calcStaffTotals()"></td>
     <td class="td-c"><input class="ci scc-c" type="number" value="${data.cc||''}" placeholder="0.00" min="0" ${ro_} oninput="staffList[${idx}].cc=this.value;calcStaffTotals()"></td>
-    <td class="td-s"><input class="ci scsr-c" type="number" value="${data.csr||''}" placeholder="0.00" min="0" ${ro_} oninput="staffList[${idx}].csr=this.value;calcStaffTotals()"></td>
     <td class="td-t"><span class="cv srow-v">0.00</span></td>
     <td><button class="del-btn" onclick="delStaff(${idx})" ${editMode?'':'disabled'}>✕</button></td>
   `;
@@ -1302,25 +1292,23 @@ function calcStaffRow(inp){
   tr.querySelector('.ssub-v').textContent=sub.toFixed(2);
   const upi=parseFloat(tr.querySelector('.supi-c').value)||0;
   const cc=parseFloat(tr.querySelector('.scc-c').value)||0;
-  const csr=parseFloat(tr.querySelector('.scsr-c').value)||0;
-  tr.querySelector('.srow-v').textContent=((upi+cc+csr)||sub).toFixed(2);
+  tr.querySelector('.srow-v').textContent=((upi+cc)||sub).toFixed(2);
   calcStaffTotals();
 }
 
 function calcStaffTotals(){
-  let tSub=0,tU=0,tC=0,tS=0,tA=0;
+  let tSub=0,tU=0,tC=0,tA=0;
   document.querySelectorAll('#sTbody tr').forEach(tr=>{
     const qty=parseFloat(tr.querySelector('.sq-c')?.value)||0;
     const pp=parseFloat(tr.querySelector('.sp-c')?.value)||0;
     const sub=qty*pp;
     const upi=parseFloat(tr.querySelector('.supi-c')?.value)||0;
     const cc=parseFloat(tr.querySelector('.scc-c')?.value)||0;
-    const csr=parseFloat(tr.querySelector('.scsr-c')?.value)||0;
-    const rowTot=(upi+cc+csr)||sub;
+    const rowTot=(upi+cc)||sub;
     tr.querySelector('.srow-v').textContent=rowTot.toFixed(2);
-    tSub+=sub;tU+=upi;tC+=cc;tS+=csr;tA+=rowTot;
+    tSub+=sub;tU+=upi;tC+=cc;tA+=rowTot;
   });
-  set('stSub',tSub);set('stUPI',tU);set('stCC',tC);set('stCSR',tS);set('stAll',tA);
+  set('stSub',tSub);set('stUPI',tU);set('stCC',tC);set('stAll',tA);
   set('totSalary',tA);set('strMeta',tA);set('qb_sal',tA);
   updateOwner();
 }
@@ -1333,7 +1321,7 @@ function renderStaff(list){
 }
 
 function addStaff(){
-  staffList.push({name:'',role:'',qty:'1',salary:'',upi:'',cc:'',csr:''});
+  staffList.push({name:'',role:'',qty:'1',salary:'',upi:'',cc:''});
   renderStaff(staffList);
 }
 
@@ -1353,6 +1341,7 @@ function calcNetProfit(){
   const free=parseFloat(document.getElementById('freeBill').value)||0;
   const net=sales-pur-sal-free;
   set('qb_net',Math.abs(net));
+  set('qb_usage',(parseFloat(document.getElementById('ctAll').textContent)||0)+(parseFloat(document.getElementById('totSalary')?.textContent)||0));
   const q4=document.getElementById('qb4');
   if(q4){q4.className='qb '+(net>=0?'c4':'c4r');}
   const q4lbl=document.getElementById('qb4_lbl');
@@ -1367,9 +1356,11 @@ function updateOwner(){
   const pur=parseFloat(document.getElementById('ctAll').textContent)||0;
   const sal=parseFloat(document.getElementById('totSalary')?.textContent)||0;
   const free=parseFloat(document.getElementById('freeBill').value)||0;
+  const usage=pur+sal;
   const pendAmt=calcPBTotal();
-  set('op_s',sales);set('op_p',pur);set('op_w',sal);set('op_fb',free);set('op_net',Math.abs(net));
-  set('op_pend',pendAmt);
+  set('op_s',sales);set('op_p',pur);set('op_w',sal);set('op_usage',usage);
+  set('op_fb',free);set('op_net',Math.abs(net));set('op_pend',pendAmt);
+  set('qb_usage',usage);
   const pbRows=document.querySelectorAll('#pbTbody tr').length;
   document.getElementById('op_pend_cnt').textContent=pbRows+' pending bill'+(pbRows!==1?'s':'');
   const cash2=parseFloat(document.getElementById('cashColl').value)||0;
@@ -1393,7 +1384,7 @@ function getSnap(){
       en:s?s.value:'',te:o?(o.getAttribute('data-te')||s.value):'',
       qty:tr.querySelector('.qty-c')?.value||'',unit:tr.querySelector('.unit-c')?.value||'',
       rate:tr.querySelector('.rate-c')?.value||'',
-      upi:tr.querySelector('.upi-c')?.value||'',cc:tr.querySelector('.cc-c')?.value||'',csr:tr.querySelector('.csr-c')?.value||''
+      upi:tr.querySelector('.upi-c')?.value||'',cc:tr.querySelector('.cc-c')?.value||''
     });
   });
   return rows;
@@ -1411,8 +1402,7 @@ function getStaffSnap(){
       qty:tr.querySelector('.sq-c')?.value||'1',
       salary:tr.querySelector('.sp-c')?.value||'',
       upi:tr.querySelector('.supi-c')?.value||'',
-      cc:tr.querySelector('.scc-c')?.value||'',
-      csr:tr.querySelector('.scsr-c')?.value||''
+      cc:tr.querySelector('.scc-c')?.value||''
     });
   });
   return rows;
@@ -1429,7 +1419,7 @@ async function saveData(){
   
   const data={
     purchases:getSnap(),
-    sales:{cashColl:document.getElementById('cashColl').value,upiColl:document.getElementById('upiColl').value,freeBill:document.getElementById('freeBill').value,openUPI:document.getElementById('openUPI').value,openCC:document.getElementById('openCC').value,openCSR:document.getElementById('openCSR').value},
+    sales:{cashColl:document.getElementById('cashColl').value,upiColl:document.getElementById('upiColl').value,freeBill:document.getElementById('freeBill').value},
     staff:getStaffSnap(),
     pendingBills:getPBSnap(),
     notes:document.getElementById('notes').value,
@@ -1665,7 +1655,7 @@ function applyData(d){
   (d.purchases||[]).forEach(r=>addPurchaseRow(r));
   if(!(d.purchases||[]).length) addDefaultRows();
   const s=d.sales||{};
-  ['cashColl','upiColl','freeBill','openUPI','openCC','openCSR'].forEach(id=>{
+  ['cashColl','upiColl','freeBill'].forEach(id=>{
     const el=document.getElementById(id);
     // backward compat: freeBill may have been saved as cashSpent
     const val=(id==='freeBill')?(s.freeBill||s.cashSpent||''):(s[id]||'');
@@ -1682,7 +1672,7 @@ function applyData(d){
 function applyDefaults(){
   document.getElementById('pTbody').innerHTML='';
   addDefaultRows();
-  ['cashColl','upiColl','freeBill','openUPI','openCC','openCSR'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['cashColl','upiColl','freeBill'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('notes').value='';
   renderStaff(defaultStaff());
   // Always start with 1 default pending bill row
@@ -1693,7 +1683,7 @@ function applyDefaults(){
 function defaultStaff(){
   return ROLES.filter(r=>!r.startsWith('Customer')).map(r=>({
     name:r.split('/')[0].trim(),
-    role:r,qty:'1',salary:'',upi:'',cc:'',csr:''
+    role:r,qty:'1',salary:'',upi:'',cc:''
   }));
 }
 
@@ -1701,7 +1691,7 @@ function defaultPendingBill(){
   return {name:'',role:'Customer',customer:'',phone:'',billNo:'',amount:''};
 }
 function addDefaultRows(){
-  ITEMS.forEach(it=>addPurchaseRow({en:it.en,qty:'',unit:it.unit,rate:'',upi:'',cc:'',csr:''}));
+  ITEMS.forEach(it=>addPurchaseRow({en:it.en,qty:'',unit:it.unit,rate:'',upi:'',cc:''}));
 }
 
 
@@ -1709,7 +1699,7 @@ function addDefaultRows(){
 setInterval(()=>{
   if(document.getElementById('app').classList.contains('visible')&&editMode){
     try{
-      const data={purchases:getSnap(),sales:{cashColl:document.getElementById('cashColl').value,upiColl:document.getElementById('upiColl').value,freeBill:document.getElementById('freeBill').value,openUPI:document.getElementById('openUPI').value,openCC:document.getElementById('openCC').value,openCSR:document.getElementById('openCSR').value},staff:getStaffSnap(),pendingBills:getPBSnap(),notes:document.getElementById('notes').value,savedAt:new Date().toISOString()};
+      const data={purchases:getSnap(),sales:{cashColl:document.getElementById('cashColl').value,upiColl:document.getElementById('upiColl').value,freeBill:document.getElementById('freeBill').value},staff:getStaffSnap(),pendingBills:getPBSnap(),notes:document.getElementById('notes').value,savedAt:new Date().toISOString()};
       localStorage.setItem('csrV6_'+currentDate,JSON.stringify(data));
     }catch(e){}
   }
@@ -1730,15 +1720,16 @@ function getDatesInRange(from,to){
   const dates=[];
   let d=new Date(from+'T00:00:00');
   const end=new Date(to+'T00:00:00');
-  end.setHours(23,59,59,999); // make end inclusive
   while(d<=end){
-    dates.push(d.toISOString().split('T')[0]);
+    const yy=d.getFullYear(),mm=String(d.getMonth()+1).padStart(2,'0'),dd=String(d.getDate()).padStart(2,'0');
+    dates.push(`${yy}-${mm}-${dd}`);
     d.setDate(d.getDate()+1);
   }
   return dates;
 }
 
 function initAnalyticsPage(){
+  if(!document.getElementById('rangeFrom').value){
   const now=new Date();
   const ym=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
   document.getElementById('monthPick').value=ym;
@@ -1746,6 +1737,7 @@ function initAnalyticsPage(){
   document.getElementById('rangeFrom').value=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-01`;
   document.getElementById('rangeTo').value=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(ld).padStart(2,'0')}`;
   loadAnalytics();
+  }
 }
 
 async function loadAnalytics(){
@@ -1763,39 +1755,41 @@ async function loadAnalytics(){
   document.getElementById('analyticsContent').innerHTML='<div class="no-data"><div class="nd-ico">⏳</div><h3>Loading…</h3><p>Fetching data in one request…</p></div>';
 
   const dataMap=await batchLoadDates(from,to);
+  window._lastAnalyticsRaw=dataMap;
   const dayData=[];
 
   Object.entries(dataMap).sort((a,b)=>a[0].localeCompare(b[0])).forEach(([date,d])=>{
     try{
       const purs=d.purchases||[];
-      let tPur=0,tPurUPI=0,tPurCC=0,tPurCSR=0;
+      let tPur=0,tPurUPI=0,tPurCC=0;
       const itemSpend={};
       purs.forEach(r=>{
         const qty=parseFloat(r.qty)||0,rt2=parseFloat(r.rate)||0;
-        const upi=parseFloat(r.upi)||0,cc=parseFloat(r.cc)||0,csr=parseFloat(r.csr)||0;
-        const rowTot=(upi+cc+csr)||(qty*rt2);
-        tPur+=rowTot;tPurUPI+=upi;tPurCC+=cc;tPurCSR+=csr;
+        const upi=parseFloat(r.upi)||0,cc=parseFloat(r.cc)||0;
+        const rowTot=(upi+cc)||(qty*rt2);
+        tPur+=rowTot;tPurUPI+=upi;tPurCC+=cc;
         if(r.en&&rowTot>0)itemSpend[r.en]=(itemSpend[r.en]||0)+rowTot;
       });
       const staff=d.staff||[];
-      let tSal=0,tSalUPI=0,tSalCC=0,tSalCSR=0;
+      let tSal=0,tSalUPI=0,tSalCC=0;
       const roleSpend={};
       staff.forEach(s=>{
         const qty=parseFloat(s.qty)||1,pp=parseFloat(s.salary)||0;
-        const u=parseFloat(s.upi)||0,c=parseFloat(s.cc)||0,cs=parseFloat(s.csr)||0;
-        const paid=(u+c+cs)||(qty*pp);
-        tSal+=paid;tSalUPI+=u;tSalCC+=c;tSalCSR+=cs;
+        const u=parseFloat(s.upi)||0,c=parseFloat(s.cc)||0;
+        const paid=(u+c)||(qty*pp);
+        tSal+=paid;tSalUPI+=u;tSalCC+=c;
         const role=(s.role||s.name||'Other').split('/')[0].trim().substring(0,16);
         roleSpend[role]=(roleSpend[role]||0)+paid;
       });
       const sv=d.sales||{};
       const tSales=(parseFloat(sv.cashColl)||0)+(parseFloat(sv.upiColl)||0);
       const tFree=parseFloat(sv.freeBill||sv.cashSpent)||0;
-      const net=tSales-tPur-tSal-tFree;
+      const tUsage=tPur+tSal;
+      const net=tSales-tUsage-tFree;
       const tPend=(d.pendingBills||[]).reduce((a,r)=>a+(parseFloat(r.amount)||0),0);
-      dayData.push({date,tPur,tSales,tSal,tFree,net,
-        tUPI:tPurUPI+tSalUPI,tCC:tPurCC+tSalCC,tCSR:tPurCSR+tSalCSR,
-        tPurUPI,tPurCC,tPurCSR,itemSpend,roleSpend,
+      dayData.push({date,tPur,tSales,tSal,tFree,tUsage,net,
+        tUPI:tPurUPI+tSalUPI,tCC:tPurCC+tSalCC,
+        tPurUPI,tPurCC,itemSpend,roleSpend,
         pendingBills:(d.pendingBills||[]).filter(r=>r.name||r.amount),tPend});
     }catch(e){}
   });
@@ -1805,6 +1799,7 @@ async function loadAnalytics(){
 
 function renderAnalytics(days,from,to){
   const cont=document.getElementById('analyticsContent');
+  window._lastAnalyticsDays=days;
   if(!days.length){
     cont.innerHTML=`<div class="no-data"><div class="nd-ico">📭</div><h3>No data for this period</h3><p>Fill daily sheets first — data will appear here automatically</p></div>`;
     return;
@@ -1813,6 +1808,7 @@ function renderAnalytics(days,from,to){
   const totSales=days.reduce((a,d)=>a+d.tSales,0);
   const totPur=days.reduce((a,d)=>a+d.tPur,0);
   const totSal=days.reduce((a,d)=>a+d.tSal,0);
+  const totUsage=totPur+totSal;
   const totNet=days.reduce((a,d)=>a+d.net,0);
   const profitDays=days.filter(d=>d.net>0).length;
   const lossDays=days.filter(d=>d.net<=0).length;
@@ -1821,7 +1817,6 @@ function renderAnalytics(days,from,to){
   const worstDay=days.reduce((a,b)=>b.net<a.net?b:a);
   const tUPI=days.reduce((a,d)=>a+d.tUPI,0);
   const tCC=days.reduce((a,d)=>a+d.tCC,0);
-  const tCSR=days.reduce((a,d)=>a+d.tCSR,0);
   // Aggregate role spend across all days
   const roleAgg={};
   days.forEach(d=>Object.entries(d.roleSpend||{}).forEach(([r,v])=>roleAgg[r]=(roleAgg[r]||0)+v));
@@ -1836,19 +1831,60 @@ function renderAnalytics(days,from,to){
       <div class="sc rev"><div class="sc-icon">💰</div><div class="sc-lbl">Total Collection</div><div class="sc-val">${f(totSales)}</div><div class="sc-sub">${days.length} days tracked</div></div>
       <div class="sc exp"><div class="sc-icon">🛒</div><div class="sc-lbl">Total Purchases</div><div class="sc-val">${f(totPur)}</div><div class="sc-sub">${f(totPur/days.length)} avg/day</div></div>
       <div class="sc exp"><div class="sc-icon">👨‍🍳</div><div class="sc-lbl">Total Salaries</div><div class="sc-val">${f(totSal)}</div><div class="sc-sub">${f(totSal/days.length)} avg/day</div></div>
+      <div class="sc exp"><div class="sc-icon">💸</div><div class="sc-lbl">Total Usage</div><div class="sc-val">${f(totPur+totSal)}</div><div class="sc-sub">Purchases + Salaries</div></div>
       <div class="sc ${totNet>=0?'pro':'los'}"><div class="sc-icon">${totNet>=0?'📈':'📉'}</div><div class="sc-lbl">Net ${totNet>=0?'Profit':'Loss'}</div><div class="sc-val">${f(Math.abs(totNet))}</div><div class="sc-sub">${profitDays}✅ ${lossDays}❌ days</div></div>
       <div class="sc avg"><div class="sc-icon">📊</div><div class="sc-lbl">Daily Avg Net</div><div class="sc-val">${f(Math.abs(avgNet))}</div><div class="sc-sub">${avgNet>=0?'Avg profit':'Avg loss'}/day</div></div>
       <div class="sc best"><div class="sc-icon">🏆</div><div class="sc-lbl">Best Day</div><div class="sc-val">${f(bestDay.net)}</div><div class="sc-sub">${bestDay.date}</div></div>
     </div>
 
+    <div class="dlog" style="margin-bottom:18px">
+      <div class="dlog-hd"><h4>📅 Weekly Pattern</h4><p>Average sales and net profit grouped by day of week — useful for staffing decisions</p></div>
+      <div style="padding:0 18px 18px">
+        ${(()=>{
+          const DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+          const dowStats={};
+          DOW.forEach(d=>{dowStats[d]={sales:0,net:0,count:0};});
+          days.forEach(d=>{
+            const dow=new Date(d.date+'T00:00:00').toLocaleDateString('en-IN',{weekday:'short'});
+            if(dowStats[dow]){dowStats[dow].sales+=d.tSales;dowStats[dow].net+=d.net;dowStats[dow].count++;}
+          });
+          const maxAvgSales=Math.max(...DOW.map(d=>dowStats[d].count?dowStats[d].sales/dowStats[d].count:0),1);
+          return DOW.map(dow=>{
+            const s=dowStats[dow];
+            if(!s.count) return `<div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);opacity:.4">
+              <div style="width:36px;font-size:11px;font-weight:700;color:var(--muted)">${dow}</div>
+              <div style="font-size:10px;color:var(--muted);flex:1">No data</div>
+            </div>`;
+            const avgSales=s.sales/s.count;
+            const avgNet=s.net/s.count;
+            const barW=Math.round((avgSales/maxAvgSales)*100);
+            const netCol=avgNet>=0?'#4ADE80':'#F87171';
+            return `<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border)">
+              <div style="width:36px;font-size:12px;font-weight:800;color:var(--accent)">${dow}</div>
+              <div style="width:28px;font-size:9px;color:var(--muted);text-align:center">${s.count}d</div>
+              <div style="flex:1;min-width:80px">
+                <div style="height:8px;border-radius:4px;background:var(--border);overflow:hidden">
+                  <div style="height:8px;border-radius:4px;background:var(--accent);width:${barW}%"></div>
+                </div>
+              </div>
+              <div style="width:90px;font-family:'DM Mono',monospace;font-size:12px;font-weight:700;color:var(--accent);text-align:right">${f(avgSales)}</div>
+              <div style="width:16px;font-size:10px;color:var(--muted);text-align:center">↔</div>
+              <div style="width:90px;font-family:'DM Mono',monospace;font-size:12px;font-weight:700;color:${netCol};text-align:right">${avgNet>=0?'+':''}${f(avgNet)}</div>
+              <div style="width:70px;font-size:9px;color:var(--muted);text-align:right">avg net</div>
+            </div>`;
+          }).join('');
+        })()}
+      </div>
+    </div>
+    
     <div class="chart-row">
       <div class="cc"><h4>Daily Revenue vs Expenses</h4><p class="cs">Green bars = Sales | Orange = Purchases+Salaries</p><canvas id="cRevExp" height="200"></canvas></div>
       <div class="cc"><h4>Net Profit / Loss per Day</h4><p class="cs">Above zero = profit (green), below = loss (red)</p><canvas id="cNet" height="200"></canvas></div>
     </div>
 
     <div class="chart-row">
-      <div class="cc"><h4>Purchase Payment Split</h4><p class="cs">UPI vs Counter Cash vs CSR/Suresh</p><canvas id="cDonut" height="190"></canvas><div class="dleg" id="dleg"></div></div>
-      <div class="cc"><h4>Expense Category Breakdown</h4><p class="cs">Purchases vs Salaries vs Cash Spent</p><canvas id="cCat" height="190"></canvas></div>
+      <div class="cc"><h4>Payment Mode Split</h4><p class="cs">UPI vs Counter Cash — Purchases &amp; Salaries combined</p><canvas id="cDonut" height="190"></canvas><div class="dleg" id="dleg"></div></div>
+      <div class="cc"><h4>Expense Breakdown</h4><p class="cs">Purchases vs Salaries vs Free Bill (Comp)</p><canvas id="cCat" height="190"></canvas></div>
     </div>
 
     <div class="itbl">
@@ -1858,74 +1894,73 @@ function renderAnalytics(days,from,to){
       </table>
     </div>
 
-    <div class="chart-row">
-      <div class="cc"><h4>Salary by Role</h4><p class="cs">Total salary paid per role across period</p><canvas id="cStaff" height="200"></canvas></div>
-      <div class="cc"><h4>Daily Salary Trend</h4><p class="cs">Total salary paid each day</p><canvas id="cSalTrend" height="200"></canvas></div>
-    </div>
-
     <div class="dlog">
-      <div class="dlog-hd"><h4>Day-by-Day Log</h4><p>UPI/CC/CSR columns = Purchases + Salaries combined per payment mode</p></div>
+      <div class="dlog-hd" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <div>
+          <h4>Day-by-Day Log</h4>
+          <p>📐 Sales=Cash+UPI · Purchases=purchase table · Salaries=staff total · Net=Sales−Purchases−Salaries−Free · UPI/CC = combined across all rows</p>
+        </div>
+        <button onclick="exportDayLogCSV()" style="background:var(--accent);color:#000;border:none;border-radius:8px;padding:6px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap">⬇ Export CSV</button>
+      </div>
       <div class="tab-wrap"><table>
         <thead><tr>
           <th class="th-b" style="text-align:left;min-width:90px">Date</th>
           <th class="th-b" style="width:36px">Day</th>
           <th class="th-b" style="min-width:80px">Sales ₹</th>
-          <th class="th-b" style="min-width:80px">Purchases ₹</th>
-          <th class="th-b" style="min-width:76px">Salaries ₹</th>
+          <th class="th-b" style="min-width:80px;background:#3D1E00;color:#FFD08A">Purchases ₹</th>
+          <th class="th-b" style="min-width:76px;background:#3D1E00;color:#FCA5A5">Salaries ₹</th>
+          <th class="th-b" style="min-width:76px;background:#5C2D00;color:#FCD34D">Total Usage ₹</th>
           <th class="th-b" style="min-width:64px">Free ₹</th>
           <th class="th-u" style="min-width:76px">📱 UPI ₹</th>
           <th class="th-c" style="min-width:72px">💵 CC ₹</th>
-          <th class="th-s" style="min-width:72px">👤 CSR ₹</th>
           <th class="th-t" style="min-width:88px">Net ₹</th>
         </tr></thead>
-        <tbody>${days.map((d,i)=>`<tr>
+        <tbody>${days.map((d,i)=>`<tr style="${i%2?'background:var(--row-alt)':''}">
           <td style="font-family:'DM Mono',monospace;font-size:11px;font-weight:700;color:var(--accent)">${d.date}</td>
           <td style="font-size:10px;color:var(--muted);text-align:center">${new Date(d.date+'T00:00:00').toLocaleDateString('en-IN',{weekday:'short'})}</td>
-          <td class="nc-g">${f(d.tSales)}</td>
-          <td class="nc-o">${f(d.tPur)}</td>
-          <td class="nc-r">${f(d.tSal)}</td>
-          <td class="nc-r" style="opacity:.7">${d.tFree?f(d.tFree):'—'}</td>
-          <td class="nc-b">${f(d.tUPI)}</td>
-          <td class="nc-o">${f(d.tCC)}</td>
-          <td class="nc-teal">${f(d.tCSR)}</td>
-          <td style="text-align:right"><span class="ppill ${d.net>=0?'pos':'neg'}">${d.net>=0?'+':''}${f(d.net)}</span></td>
+          <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:700;color:#4ADE80">${f(d.tSales)}</td>
+          <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:600;color:#FBA85A">${f(d.tPur)}</td>
+          <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:600;color:#FC9898">${f(d.tSal)}</td>
+          <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:800;color:#FCD34D">${f(d.tUsage)}</td>
+          <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:500">${d.tFree?f(d.tFree):'—'}</td>
+          <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:600;color:#7DD3FC">${f(d.tUPI)}</td>
+          <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:600;color:#E6CB60">${f(d.tCC)}</td>
+          <td style="text-align:right;font-weight:700"><span class="ppill ${d.net>=0?'pos':'neg'}">${d.net>=0?'+':''}${f(d.net)}</span></td>
         </tr>`).join('')}
         </tbody>
         <tfoot><tr style="background:var(--tfoot)">
-          <td colspan="2" style="color:var(--gold);font-weight:800;font-size:11px;padding:8px 12px">TOTALS (${days.length} days)</td>
-          <td class="nc-bold" style="color:#6EE7B7">${f(totSales)}</td>
-          <td class="nc-bold" style="color:#FCD34D">${f(totPur)}</td>
-          <td class="nc-bold" style="color:#FCA5A5">${f(totSal)}</td>
-          <td class="nc-bold" style="color:#FCA5A5">${f(days.reduce((a,d)=>a+(d.tFree||0),0))}</td>
-          <td class="nc-bold" style="color:#A8C8FF">${f(tUPI)}</td>
-          <td class="nc-bold" style="color:#FFD08A">${f(tCC)}</td>
-          <td class="nc-bold" style="color:#88DD88">${f(tCSR)}</td>
-          <td style="text-align:right"><span class="ppill ${totNet>=0?'pos':'neg'}">${totNet>=0?'+':''}${f(totNet)}</span></td>
+          <td colspan="2" style="color:var(--gold);font-weight:800;font-size:11px;padding:8px 10px">TOTALS (${days.length} days)</td>
+          <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:800;color:#4ADE80">${f(totSales)}</td>
+          <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:800;color:#FBA85A">${f(totPur)}</td>
+          <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:800;color:#FC9898">${f(totSal)}</td>
+          <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:800;color:#FCD34D">${f(totUsage)}</td>
+          <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:800;color:#C4B5A0">${f(days.reduce((a,d)=>a+(d.tFree||0),0))}</td>
+          <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:800;color:#7DD3FC">${f(tUPI)}</td>
+          <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:800;color:#FDE68A">${f(tCC)}</td>
+          <td style="text-align:right;font-weight:800"><span class="ppill ${totNet>=0?'pos':'neg'}">${totNet>=0?'+':''}${f(totNet)}</span></td>
         </tr></tfoot>
       </table></div>
     </div>
 
     ${(()=>{
-      // ── PENDING BILLS LOG ──────────────────────────────
+      // ── PENDING BILLS LOG ──
       const allPB=[];
       days.forEach(d=>(d.pendingBills||[]).forEach(r=>{
         if(r.name||r.amount) allPB.push({...r,date:d.date});
       }));
+      const f2=v=>v?(parseFloat(v)||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}):'—';
       if(!allPB.length) return `
         <div class="dlog">
           <div class="dlog-hd"><h4>⚠️ Pending Bills Log</h4><p>No pending bills recorded in this period</p></div>
-          <div style="padding:20px 18px;font-size:12px;color:var(--muted)">— No pending bills found for selected date range —</div>
+          <div style="padding:20px 18px;font-size:12px;color:var(--muted)">— No pending bills found —</div>
         </div>`;
-
       const grandTotal=allPB.reduce((a,r)=>a+(parseFloat(r.amount)||0),0);
-      const f2=v=>v?(parseFloat(v)||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}):'—';
-
       return `
         <div class="dlog">
           <div class="dlog-hd" style="display:flex;align-items:center;justify-content:space-between;padding-bottom:12px">
             <div>
               <h4>⚠️ Pending Bills Log</h4>
-              <p>${allPB.length} bill${allPB.length!==1?'s':''} · across ${new Set(allPB.map(r=>r.date)).size} day${new Set(allPB.map(r=>r.date)).size!==1?'s':''} · Total outstanding: <strong style="color:#F59E0B">₹${f2(grandTotal)}</strong></p>
+            <p>${allPB.length} bill${allPB.length!==1?'s':''} · across ${new Set(allPB.map(r=>r.date)).size} days · Total outstanding: <strong style="color:#F59E0B">₹${f2(grandTotal)}</strong></p>
             </div>
           </div>
           <div class="tab-wrap"><table>
@@ -1935,21 +1970,21 @@ function renderAnalytics(days,from,to){
               <th class="th-b" style="text-align:left;min-width:110px">Name</th>
               <th class="th-b" style="text-align:left;min-width:80px">Role</th>
               <th class="th-b" style="text-align:left;min-width:110px">Customer</th>
-              <th class="th-b" style="text-align:center;min-width:110px">Phone</th>
+              <th class="th-b" style="text-align:center;min-width:100px">Phone</th>
               <th class="th-b" style="text-align:center;min-width:70px">Bill No</th>
               <th class="th-t" style="min-width:90px">Amount ₹</th>
             </tr></thead>
             <tbody>
-              ${allPB.map(r=>`<tr>
-                <td style="font-family:'DM Mono',monospace;font-size:11px;font-weight:700;color:var(--accent)">${r.date}</td>
-                <td style="font-size:10px;color:var(--muted);text-align:center">${new Date(r.date+'T00:00:00').toLocaleDateString('en-IN',{weekday:'short'})}</td>
-                <td style="text-align:left;font-weight:600">${r.name||'—'}</td>
-                <td style="text-align:left;font-size:11px;color:var(--muted)">${r.role||'—'}</td>
-                <td style="text-align:left;font-size:11px">${r.customer||'—'}</td>
-                <td style="text-align:center;font-family:'DM Mono',monospace;font-size:11px">${r.phone||'—'}</td>
-                <td style="text-align:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--accent)">${r.billNo||'—'}</td>
-                <td class="nc-bold" style="color:#FCA5A5">₹${f2(r.amount)}</td>
-              </tr>`).join('')}
+              ${allPB.map((r,i)=>`<tr style="${i%2?'background:var(--row-alt)':''}">
+              <td style="font-family:'DM Mono',monospace;font-size:11px;font-weight:700;color:var(--accent)">${r.date}</td>
+              <td style="font-size:10px;color:var(--muted);text-align:center">${new Date(r.date+'T00:00:00').toLocaleDateString('en-IN',{weekday:'short'})}</td>
+              <td style="text-align:left;padding-left:8px;font-weight:600">${r.name||'—'}</td>
+              <td style="text-align:left;padding-left:8px;font-size:11px;color:var(--muted)">${r.role||'—'}</td>
+              <td style="text-align:left;padding-left:8px;font-size:11px">${r.customer||'—'}</td>
+              <td style="text-align:center;font-family:'DM Mono',monospace;font-size:11px">${r.phone||'—'}</td>
+              <td style="text-align:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--accent)">${r.billNo||'—'}</td>
+              <td class="nc-bold" style="color:#FCA5A5">₹${f2(r.amount)}</td>
+            </tr>`).join('')}
             </tbody>
             <tfoot><tr style="background:var(--tfoot)">
               <td colspan="7" style="color:var(--gold);font-weight:800;font-size:11px;padding:8px 12px">TOTAL OUTSTANDING (${allPB.length} bills)</td>
@@ -1958,15 +1993,146 @@ function renderAnalytics(days,from,to){
           </table></div>
         </div>`;
     })()}
+
+    ${(()=>{
+      // ── STAFF SALARY LOG — collapsible, name/role filter, at bottom ──
+      const salRows=[];
+      days.forEach(d=>{
+        const rawD=window._lastAnalyticsRaw?.[d.date];
+        if(!rawD)return;
+        (rawD.staff||[]).forEach(s=>{
+          const qty=parseFloat(s.qty)||1,pp=parseFloat(s.salary)||0;
+          const u=parseFloat(s.upi)||0,c=parseFloat(s.cc)||0;
+          const paid=(u+c)||(qty*pp);
+          if(!paid&&!s.name)return;
+          const role=(s.role||s.name||'Other').split('/')[0].trim();
+          salRows.push({date:d.date,name:s.name||'—',role,qty,pp,upi:u,cc:c,paid});
+        });
+      });
+      if(!salRows.length) return '<div class="dlog" style="margin-bottom:18px"><div class="dlog-hd"><h4>👥 Staff Salary Log</h4><p>No salary data in this period</p></div></div>';
+      const roleTotals={};
+      salRows.forEach(r=>{roleTotals[r.role]=(roleTotals[r.role]||0)+r.paid;});
+      const roleEntries=Object.entries(roleTotals).sort((a,b)=>b[1]-a[1]);
+      const grandSal=roleEntries.reduce((a,[,v])=>a+v,0);
+      const allNames=[...new Set(salRows.map(r=>r.name))].filter(n=>n!=='—').sort();
+      const allRoles=[...new Set(salRows.map(r=>r.role))].sort();
+      const uid='sl'+Math.random().toString(36).slice(2,7);
+      return `
+        <div class="dlog" style="margin-bottom:18px">
+          <div class="dlog-hd" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-bottom:10px">
+            <div>
+              <h4>👥 Staff Salary Log</h4>
+              <p>Grand Total: <strong style="color:var(--accent)">${f(grandSal)}</strong> · ${salRows.length} entries · ${roleEntries.length} roles · ${days.length} days</p>
+            </div>
+            <button onclick="const el=document.getElementById('${uid}');const btn=this;if(el.style.display==='none'){el.style.display='block';btn.textContent='▲ Collapse';}else{el.style.display='none';btn.textContent='▼ Show Salary Log';}" style="background:var(--accent);color:#000;border:none;border-radius:8px;padding:6px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">▼ Show Salary Log</button>
+          </div>
+          <div id="${uid}" style="display:none">
+            <div style="display:flex;flex-wrap:wrap;gap:10px;padding:0 18px 16px">
+              ${roleEntries.map(([role,tot])=>`<div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:10px;padding:10px 16px;min-width:130px">
+                <div style="font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">${role}</div>
+                <div style="font-size:17px;font-weight:800;color:var(--accent);font-family:'DM Mono',monospace">${f(tot)}</div>
+                <div style="font-size:9px;color:var(--muted);margin-top:2px">${f(Math.round(tot/days.length))}/day avg</div>
+              </div>`).join('')}
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;padding:0 18px 12px;align-items:center">
+              <label style="font-size:11px;color:var(--muted);font-weight:600">Filter:</label>
+              <select id="${uid}_name" onchange="filterSalLog('${uid}')" style="font-size:11px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:inherit">
+                <option value="">— All Names —</option>
+                ${allNames.map(n=>`<option value="${n}">${n}</option>`).join('')}
+              </select>
+              <select id="${uid}_role" onchange="filterSalLog('${uid}')" style="font-size:11px;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:inherit">
+                <option value="">— All Roles —</option>
+                ${allRoles.map(r=>`<option value="${r}">${r}</option>`).join('')}
+              </select>
+              <button onclick="document.getElementById('${uid}_name').value='';document.getElementById('${uid}_role').value='';filterSalLog('${uid}')" style="font-size:10px;padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-family:inherit">✕ Clear</button>
+              <span id="${uid}_count" style="font-size:10px;color:var(--muted);margin-left:4px"></span>
+            </div>
+            <div class="tab-wrap" id="${uid}_table">
+              <table>
+                <thead><tr>
+                  <th class="th-b" style="text-align:left;min-width:90px">Date</th>
+                  <th class="th-b" style="width:36px">Day</th>
+                  <th class="th-b" style="text-align:left;min-width:110px">Name</th>
+                  <th class="th-b" style="text-align:left;min-width:110px">Role</th>
+                  <th class="th-b" style="width:40px">Qty</th>
+                  <th class="th-b" style="min-width:76px">Per Person ₹</th>
+                  <th class="th-u" style="min-width:70px">📱 UPI ₹</th>
+                  <th class="th-c" style="min-width:70px">💵 Cash ₹</th>
+                  <th class="th-t" style="min-width:76px">Paid ₹</th>
+                </tr></thead>
+                <tbody id="${uid}_body">
+                ${salRows.map((r,i)=>`<tr data-name="${r.name}" data-role="${r.role}" style="${i%2?'background:var(--row-alt)':''}">
+                  <td style="font-family:'DM Mono',monospace;font-size:11px;font-weight:700;color:var(--accent)">${r.date}</td>
+                  <td style="font-size:10px;color:var(--muted);text-align:center">${new Date(r.date+'T00:00:00').toLocaleDateString('en-IN',{weekday:'short'})}</td>
+                  <td style="text-align:left;padding-left:8px;font-weight:600;font-size:11px">${r.name}</td>
+                  <td style="text-align:left;padding-left:8px;font-size:11px;color:var(--muted)">${r.role}</td>
+                  <td style="text-align:center;font-family:'DM Mono',monospace">${r.qty}</td>
+                  <td style="text-align:right;font-family:'DM Mono',monospace;color:var(--muted)">${r.pp?f(r.pp):'—'}</td>
+                  <td class="nc-b">${r.upi?f(r.upi):'—'}</td>
+                  <td class="nc-o">${r.cc?f(r.cc):'—'}</td>
+                  <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:800;color:var(--accent)">${f(r.paid)}</td>
+                </tr>`).join('')}
+                </tbody>
+                <tfoot><tr style="background:var(--tfoot)">
+                  <td colspan="8" style="color:var(--gold);font-weight:800;font-size:11px;padding:8px 12px" id="${uid}_totlbl">TOTAL (${salRows.length} entries)</td>
+                  <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:800;color:var(--accent);padding:8px" id="${uid}_totval">${f(grandSal)}</td>
+                </tr></tfoot>
+              </table>
+            </div>
+          </div>
+        </div>`;
+    })()}
   `;
 
   requestAnimationFrame(()=>{
     drawRevExp(days);drawNet(days);
-    drawDonut(tUPI,tCC,tCSR,totPur);
+    drawDonut(tUPI,tCC,totPur);
     drawCat(totPur,totSal,days.reduce((a,d)=>a+(d.tFree||0),0));
-    drawStaffByRole(roleAgg);
-    drawSalTrend(days);
   });
+}
+
+// ── SALARY LOG FILTER ──
+function filterSalLog(uid){
+  const nameFilter=document.getElementById(uid+'_name')?.value||'';
+  const roleFilter=document.getElementById(uid+'_role')?.value||'';
+  const rows=[...document.querySelectorAll('#'+uid+'_body tr')];
+  let visible=0,total=0;
+  rows.forEach(tr=>{
+    const nm=tr.dataset.name||'',rl=tr.dataset.role||'';
+    const show=(!nameFilter||nm===nameFilter)&&(!roleFilter||rl===roleFilter);
+    tr.style.display=show?'':'none';
+    if(show){visible++;
+      const paid=parseFloat(tr.querySelector('td:last-child')?.textContent?.replace(/[₹,]/g,''))||0;
+      total+=paid;
+    }
+  });
+  const cnt=document.getElementById(uid+'_count');
+  if(cnt) cnt.textContent=`Showing ${visible} of ${rows.length} entries`;
+  const totlbl=document.getElementById(uid+'_totlbl');
+  const totval=document.getElementById(uid+'_totval');
+  if(totlbl) totlbl.textContent=`TOTAL (${visible} entries)`;
+  if(totval) totval.textContent='₹'+total.toLocaleString('en-IN',{maximumFractionDigits:0});
+}
+
+// Day-by-Day Log download to CSV
+function exportDayLogCSV(){
+  const days=window._lastAnalyticsDays;
+  if(!days||!days.length){toast('Load analytics first','warn');return;}
+  const hdr=['Date','Day','Sales','Purchases','Salaries','Total Usage','Free Bill','UPI','CC','Net'];
+  const rows=days.map(d=>[
+    d.date,
+    new Date(d.date+'T00:00:00').toLocaleDateString('en-IN',{weekday:'short'}),
+    d.tSales.toFixed(2),d.tPur.toFixed(2),d.tSal.toFixed(2),d.tUsage.toFixed(2),
+    (d.tFree||0).toFixed(2),d.tUPI.toFixed(2),d.tCC.toFixed(2),d.net.toFixed(2)
+  ]);
+  const csv=[hdr,...rows].map(r=>r.join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  const from=document.getElementById('rangeFrom').value;
+  const to=document.getElementById('rangeTo').value;
+  a.download='CSR_DayLog_'+from+'_to_'+to+'.csv';
+  a.click();
+  toast('📥 CSV downloaded!','success');
 }
 
 // CHARTS
@@ -2043,11 +2209,11 @@ function drawNet(days){
   });
 }
 
-function drawDonut(upi,cc,csr,tot){
+function drawDonut(upi,cc,tot){
   const r=setupCanvas('cDonut',190);if(!r)return;
   const{ctx,W,H}=r,t=tc();
-  const total=Math.max(upi+cc+csr,1);
-  const segs=[{l:'UPI/PhonePay',v:upi,c:'#3B82F6'},{l:'Counter Cash',v:cc,c:'#F59E0B'},{l:'CSR/Suresh',v:csr,c:'#10B981'}];
+  const total=Math.max(upi+cc,1);
+  const segs=[{l:'UPI/PhonePay',v:upi,c:'#3B82F6'},{l:'Counter Cash',v:cc,c:'#F59E0B'}];
   const cx=W*0.38,cy=H/2,ro=H*.42,ri=H*.22;
   let angle=-Math.PI/2;
   segs.forEach(s=>{
@@ -2068,7 +2234,7 @@ function drawDonut(upi,cc,csr,tot){
 function drawCat(pur,sal,spent){
   const r=setupCanvas('cCat',190);if(!r)return;
   const{ctx,W,H}=r,t=tc();
-  const cats=[{l:'Purchases',v:pur,c:'#F59E0B'},{l:'Salaries',v:sal,c:'#EF4444'},{l:'Cash Spent',v:spent,c:'#8B5CF6'}];
+  const cats=[{l:'Purchases',v:pur,c:'#F59E0B'},{l:'Salaries',v:sal,c:'#EF4444'},{l:'Free Bill (Comp)',v:spent,c:'#8B5CF6'}];
   const total=Math.max(pur+sal+spent,1);
   const pad={l:14,r:14,t:14,b:14};
   const ch=H-pad.t-pad.b,cw=W-pad.l-pad.r;
@@ -2227,48 +2393,46 @@ function buildPDF(){
   const netProfit=totSales-totPur-totSal-freeBillV;
   const netColor=netProfit>=0?[16,160,80]:[200,40,40];
 
-  doc.setFillColor(40,26,8);doc.roundedRect(M,y,PW-M*2,22,2,2,'F');
-  doc.setFillColor(180,120,0);doc.roundedRect(M,y,PW-M*2,0.8,0.4,0.4,'F');
-  const boxW=(PW-M*2)/5;
+  const totUsagePDF=totPur+totSal;
+  // 6-box summary: Sales | Purchases | Salaries | Total Usage | Free Bill | Net Profit
   const summaryItems=[
     ['TOTAL SALES','Rs.'+totSales.toFixed(2),[245,183,45]],
     ['PURCHASES','Rs.'+totPur.toFixed(2),[255,160,60]],
     ['SALARIES','Rs.'+totSal.toFixed(2),[255,160,60]],
+    ['TOTAL USAGE','Rs.'+totUsagePDF.toFixed(2),[255,120,60]],
     ['FREE BILL','Rs.'+freeBillV.toFixed(2),[200,180,100]],
+    ['PENDING BILLS','Rs.'+pendAmt.toFixed(2),[255,180,80]],
     [netProfit>=0?'NET PROFIT':'NET LOSS','Rs.'+Math.abs(netProfit).toFixed(2),netColor],
   ];
+  const boxW=(PW-M*2)/summaryItems.length;
+  const BOXH=26;
+  doc.setFillColor(30,18,4);doc.roundedRect(M,y,PW-M*2,BOXH,2,2,'F');
+  doc.setFillColor(180,120,0);doc.roundedRect(M,y,PW-M*2,0.8,0.4,0.4,'F');
+  
   summaryItems.forEach(([label,value,color],i)=>{
     const bx=M+i*boxW;
-    if(i>0){doc.setDrawColor(100,70,20);doc.setLineWidth(0.4);doc.line(bx,y+3,bx,y+19);}
-    doc.setFont('helvetica','normal');doc.setFontSize(6.5);doc.setTextColor(180,160,100);
-    doc.text(label,bx+boxW/2,y+8,{align:'center'});
-    doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(...color);
-    doc.text(value,bx+boxW/2,y+17,{align:'center'});
+    if(i>0){doc.setDrawColor(90,60,15);doc.setLineWidth(0.3);doc.line(bx,y+4,bx,y+BOXH-4);}
+    doc.setFont('helvetica','normal');doc.setFontSize(5.5);doc.setTextColor(160,140,90);
+    doc.text(label,bx+boxW/2,y+9,{align:'center'});
+    doc.setFont('helvetica','bold');doc.setFontSize(7.5);doc.setTextColor(...color);
+    doc.text(value,bx+boxW/2,y+18,{align:'center'});
   });
-  y+=27;
 
-  // ── OPENING BALANCES ──
-  const oUPI=parseFloat(document.getElementById('openUPI').value)||0;
-  const oCC =parseFloat(document.getElementById('openCC').value)||0;
-  const oCSR=parseFloat(document.getElementById('openCSR').value)||0;
-  if(oUPI||oCC||oCSR){
-    doc.setFillColor(15,30,60);doc.rect(M,y,PW-M*2,7,'F');
-    doc.setFont('helvetica','bold');doc.setFontSize(7.5);doc.setTextColor(168,200,255);
-    doc.text('OPENING BALANCES',M+2,y+5);
-    const obItems=[['UPI',oUPI],['Counter Cash',oCC],['CSR/Suresh',oCSR]];
-    const obW=(PW-M*2-40)/3;
-    obItems.forEach(([l,v],i)=>{
-      const ox=M+40+i*obW;
-      doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(200,220,255);
-      doc.text(l+': Rs.'+v.toFixed(2),ox,y+5);
-    });
-    y+=9;
-  }
+  y+=BOXH+2;
+  y+=4;
+
+  // Column definitions: [label, width, align]
+  const PCOLS=[
+    ['#',6,'c'],['Item Name',52,'l'],['Qty',12,'c'],['Unit',13,'c'],
+    ['Rate',18,'r'],['Sub',20,'r'],['UPI',24,'r'],['CC',22,'r'],['Total',22,'r']
+  ];
+  const PCW=PCOLS.map(c=>c[1]);
+  const totalW=PCW.reduce((a,b)=>a+b,0);
 
   // ── PURCHASES TABLE ──
   addPageIfNeeded(30);
-  doc.setFillColor(45,24,0);doc.rect(M,y,PW-M*2,8,'F');
-  doc.setFillColor(200,130,0);doc.rect(M,y+7.6,PW-M*2,0.4,'F');
+  doc.setFillColor(45,24,0);doc.rect(M,y,189,8,'F');
+  doc.setFillColor(200,130,0);doc.rect(M,y+7.6,189,0.4,'F');
   doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(255,255,255);
   doc.text('PURCHASE REGISTER',M+3,y+5.5);
   const tAll=parseFloat(document.getElementById('ctAll').textContent)||0;
@@ -2276,16 +2440,9 @@ function buildPDF(){
   doc.text('Total: Rs.'+tAll.toFixed(2),PW-M-2,y+5.5,{align:'right'});
   y+=9;
 
-  // Column definitions: [label, width, align]
-  const PCOLS=[
-    ['#',5,'c'],['Item Name',46,'l'],['Qty',12,'c'],['Unit',12,'c'],
-    ['Rate',16,'r'],['Sub',18,'r'],['UPI',20,'r'],['CC',18,'r'],['CSR',18,'r'],['Total',22,'r']
-  ];
-  const PCW=PCOLS.map(c=>c[1]);
-  const totalW=PCW.reduce((a,b)=>a+b,0);
   // Header row
-  const PHDRBG =[[45,24,0],[45,24,0],[45,24,0],[45,24,0],[45,24,0],[45,24,0],[15,35,90],[80,40,0],[10,50,10],[55,20,0]];
-  const PHDRTXT=[[255,255,255],[255,255,255],[255,255,255],[255,255,255],[255,255,255],[255,255,255],[168,200,255],[255,208,138],[140,220,140],[255,184,112]];
+  const PHDRBG =[[45,24,0],[45,24,0],[45,24,0],[45,24,0],[45,24,0],[45,24,0],[15,35,90],[80,40,0],[55,20,0]];
+  const PHDRTXT=[[255,255,255],[255,255,255],[255,255,255],[255,255,255],[255,255,255],[255,255,255],[168,200,255],[255,208,138],[255,184,112]];
   let xp=M;
   PCOLS.forEach(([lbl,w],i)=>{
     doc.setFillColor(...PHDRBG[i]);doc.rect(xp,y,w,7,'F');
@@ -2298,44 +2455,45 @@ function buildPDF(){
   rows.forEach((row)=>{
     if(!row.en&&!row.qty&&!row.rate)return;
     const qty=parseFloat(row.qty)||0,rate=parseFloat(row.rate)||0,sub=qty*rate;
-    const upi=parseFloat(row.upi)||0,cc=parseFloat(row.cc)||0,csr=parseFloat(row.csr)||0;
-    const rowTot=(upi+cc+csr)||sub;
+    const upi=parseFloat(row.upi)||0,cc=parseFloat(row.cc)||0;
+    const rowTot=(upi+cc)||sub;
     if(rowTot===0&&!row.en)return;
     rn++;
     addPageIfNeeded(7);
     const bg=rn%2===0?[252,246,232]:[243,234,210];
-    doc.setFillColor(...bg);doc.rect(M,y,totalW,6.5,'F');
+    doc.setFillColor(...bg);doc.rect(M,y,PW-M*2,6.5,'F');
     const vals=[String(rn),row.en||'—',qty?String(qty):'—',row.unit||'',
                 rate?rate.toFixed(2):'—',sub?sub.toFixed(2):'—',
                 upi?upi.toFixed(2):'—',cc?cc.toFixed(2):'—',
-                csr?csr.toFixed(2):'—',rowTot?rowTot.toFixed(2):'—'];
+                rowTot?rowTot.toFixed(2):'—'];
     xp=M;
     PCOLS.forEach(([,w,al],i)=>{
       doc.setTextColor(40,20,0);doc.setFontSize(6.5);
-      doc.setFont('helvetica',i===9||i===0?'bold':'normal');
+      doc.setFont('helvetica',i===8||i===0?'bold':'normal');
       const tx=al==='l'?xp+1.5:al==='r'?xp+w-1.5:xp+w/2;
       doc.text(String(vals[i]),tx,y+4.5,{align:al==='l'?'left':al==='r'?'right':'center'});
       xp+=w;
     });
     doc.setDrawColor(220,200,160);doc.setLineWidth(0.12);
-    doc.line(M,y+6.5,M+totalW,y+6.5);
+    doc.line(M,y+6.5,M+totalW,y+6.5); 
     y+=6.5;
   });
 
   // Totals row
   const tU=parseFloat(document.getElementById('ctUPI').textContent)||0;
   const tC=parseFloat(document.getElementById('ctCC').textContent)||0;
-  const tS=parseFloat(document.getElementById('ctCSR').textContent)||0;
   addPageIfNeeded(10);
   doc.setFillColor(45,24,0);doc.rect(M,y,totalW,8,'F');
-  const tv=['','TOTAL ('+rn+' items)','','','','',tU.toFixed(2),tC.toFixed(2),tS.toFixed(2),tAll.toFixed(2)];
+  const tv=['','TOTAL ('+rn+' items)','','','','',tU.toFixed(2),tC.toFixed(2),tAll.toFixed(2)];
   xp=M;
-  PCOLS.forEach(([,w],i)=>{
-    const c=i===9?[255,184,112]:i>=6?[255,220,120]:[255,220,80];
+  PCOLS.forEach(([,w,al],i)=>{
+    const c=i===8?[255,184,112]:i>=6?[255,220,120]:[255,220,80];
     doc.setTextColor(...c);doc.setFontSize(7);doc.setFont('helvetica','bold');
-    doc.text(String(tv[i]),xp+w/2,y+5.5,{align:'center'});xp+=w;
+    const txAlign=i>=6?'right':i===1?'left':'center';
+    const tx=txAlign==='right'?xp+w-2:txAlign==='left'?xp+2:xp+w/2;
+    doc.text(String(tv[i]),tx,y+5.5,{align:txAlign});xp+=w;
   });
-  y+=12;
+  y+=10;
 
   // ── COLLECTION / SALES ──
   addPageIfNeeded(38);
@@ -2402,6 +2560,9 @@ function buildPDF(){
   const staffHeaderH=8+6.5; // section header + col header
   const staffTotalH=8;
   const staffNeeded=staffHeaderH+staff.length*staffRowH+staffTotalH+4;
+  const SCOLS=[['Name',40,'l'],['Role',44,'l'],['Qty',12,'c'],['Per Person',30,'r'],['Mode',20,'c'],['Total',PW-M*2-40-44-12-30-20,'r']];
+  const SCW=SCOLS.map(c=>c[1]);
+  const stotalW=SCW.reduce((a,b)=>a+b,0);
   addPageIfNeeded(staffNeeded);
 
   doc.setFillColor(60,0,60);doc.rect(M,y,PW-M*2,8,'F');
@@ -2411,14 +2572,12 @@ function buildPDF(){
   doc.setTextColor(255,160,255);
   const totSalPDF2=staff.reduce((a,s)=>{
     const q=parseFloat(s.qty)||1,p=parseFloat(s.salary)||0;
-    const u=parseFloat(s.upi)||0,c=parseFloat(s.cc)||0,cs=parseFloat(s.csr)||0;
-    return a+((u+c+cs)||(q*p));
+    const u=parseFloat(s.upi)||0,c=parseFloat(s.cc)||0;
+    return a+((u+c)||(q*p));
   },0);
   doc.text('Total: Rs.'+totSalPDF2.toFixed(2),PW-M-2,y+5.5,{align:'right'});
   y+=9;
-  const SCOLS=[['Name',38,'l'],['Role',42,'l'],['Qty',10,'c'],['Per Person',28,'r'],['Mode',18,'c'],['Total',28,'r']];
-  const SCW=SCOLS.map(c=>c[1]);
-  const stotalW=SCW.reduce((a,b)=>a+b,0);
+
   xp=M;
   SCOLS.forEach(([lbl,w])=>{
     doc.setFillColor(60,0,60);doc.rect(xp,y,w,6.5,'F');
@@ -2429,11 +2588,11 @@ function buildPDF(){
   staff.forEach((s,i)=>{
     addPageIfNeeded(staffRowH+2);
     const qty=parseFloat(s.qty)||1,pp=parseFloat(s.salary)||0;
-    const u=parseFloat(s.upi)||0,c=parseFloat(s.cc)||0,cs=parseFloat(s.csr)||0;
-    const tot=(u+c+cs)||(qty*pp);
-    const mode=u?'UPI':c?'Cash':cs?'CSR':'—';
+    const u=parseFloat(s.upi)||0,c=parseFloat(s.cc)||0;
+    const tot=(u+c)||(qty*pp);
+    const mode=u?'UPI':c?'Cash':'—';
     const bg=i%2===0?[252,240,252]:[242,225,242];
-    doc.setFillColor(...bg);doc.rect(M,y,stotalW,6.5,'F');
+    doc.setFillColor(...bg);doc.rect(M,y,PW-M*2,6.5,'F');
     const svals=[s.name||'—',s.role?.split('/')[0].trim()||'—',String(qty),
                  pp?'Rs.'+pp.toFixed(0):'—',mode,tot?'Rs.'+tot.toFixed(2):'—'];
     xp=M;
@@ -2445,29 +2604,29 @@ function buildPDF(){
       xp+=w;
     });
     doc.setDrawColor(210,180,210);doc.setLineWidth(0.12);
-    doc.line(M,y+6.5,M+stotalW,y+6.5);
+    doc.line(M,y+6.5,M+PW-M*2,y+6.5);
     y+=6.5;
   });
   // Staff total row
   addPageIfNeeded(10);
-  doc.setFillColor(60,0,60);doc.rect(M,y,stotalW,8,'F');
+  doc.setFillColor(60,0,60);doc.rect(M,y,PW-M*2,8,'F');
   doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(255,200,255);
-  doc.text('TOTAL SALARIES: Rs.'+totSalPDF2.toFixed(2),M+stotalW/2,y+5.5,{align:'center'});
+  doc.text('TOTAL SALARIES: Rs.'+totSalPDF2.toFixed(2),PW/2,y+5.5,{align:'center'});
   y+=12;
 
   // ── PENDING BILLS ──
   const pbRows=getPBSnap().filter(r=>r.name||r.amount);
   if(pbRows.length){
     addPageIfNeeded(12+pbRows.length*7);
-    doc.setFillColor(60,30,0);doc.rect(M,y,PW-M*2,8,'F');
-    doc.setFillColor(255,120,0);doc.rect(M,y+7.6,PW-M*2,0.4,'F');
+    doc.setFillColor(60,30,0);doc.rect(M,y,189,8,'F');
+    doc.setFillColor(255,120,0);doc.rect(M,y+7.6,189,0.4,'F');
     doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(255,200,100);
     doc.text('PENDING BILLS',M+3,y+5.5);
     doc.text('Total: Rs.'+pendAmt.toFixed(2),PW-M-2,y+5.5,{align:'right'});
     y+=9;
     ['Name','Role','Customer','Phone','Bill No','Amount'].forEach((h,i)=>{
-      const bw=[30,22,38,30,22,22][i];
-      const bx=M+[0,30,52,90,120,142][i];
+      const bw=[35,24,42,32,26,30][i];
+      const bx=M+[0,35,59,101,133,159][i];
       doc.setFillColor(60,30,0);doc.rect(bx,y,bw,6,'F');
       doc.setTextColor(255,200,100);doc.setFontSize(6.5);doc.setFont('helvetica','bold');
       doc.text(h,bx+bw/2,y+4.2,{align:'center'});
@@ -2477,9 +2636,9 @@ function buildPDF(){
       addPageIfNeeded(7);
       const bg=i%2===0?[255,248,235]:[248,235,215];
       doc.setFillColor(...bg);
-      doc.rect(M,y,164,6.5,'F');
-      const bws=[30,22,38,30,22,22];
-      const bxs=[0,30,52,90,120,142];
+      doc.rect(M,y,PW-M*2,6.5,'F');
+      const bws=[35,24,42,32,26,30];
+      const bxs=[0,35,59,101,133,159];
       [r.name,r.role,r.customer,r.phone,r.billNo,r.amount?'Rs.'+parseFloat(r.amount).toFixed(2):'—'].forEach((v,j)=>{
         doc.setTextColor(50,25,0);doc.setFontSize(6.5);doc.setFont('helvetica','normal');
         doc.text(String(v||'—'),M+bxs[j]+bws[j]/2,y+4.5,{align:'center'});
@@ -2501,7 +2660,7 @@ function buildPDF(){
     doc.text('Confidential \u2014 Internal Use Only',PW/2,PH-1.5,{align:'center'});
   }
 
-  doc.save('CSR_'+currentDate+'.pdf');
+  doc.save('CSR Restaurant Sales Report_'+currentDate+'.pdf');
   toast('\ud83d\udcc4 PDF downloaded!','success');
 }
 
@@ -2515,22 +2674,35 @@ function set(id,val){const el=document.getElementById(id);if(el)el.textContent=t
 // CLEAN EMPTY ROWS (on manual save only)
 // ══════════════════════════════════════════
 function cleanEmptyRows(){
+  // Clean purchase rows — remove if no name, qty, rate, upi, or cc
   const pRows=[...document.querySelectorAll('#pTbody tr')];
   pRows.forEach(tr=>{
+    const en=tr.querySelector('.en-c')?.value?.trim()||'';
     const upi=tr.querySelector('.upi-c')?.value||'';
     const cc=tr.querySelector('.cc-c')?.value||'';
-    const csr=tr.querySelector('.csr-c')?.value||'';
     const qty=tr.querySelector('.qty-c')?.value||'';
     const rate=tr.querySelector('.rate-c')?.value||'';
-    if(!upi&&!cc&&!csr&&!qty&&!rate) tr.remove();
+    if(!en&&!upi&&!cc&&!qty&&!rate) tr.remove();
   });
+  // Clean staff rows — remove if no name AND no salary AND no upi AND no cc
   const sRows=[...document.querySelectorAll('#sTbody tr')];
   sRows.forEach(tr=>{
-    const name=tr.querySelector('input')?.value||'';
+    const name=tr.querySelector('input')?.value?.trim()||'';
     const sal=tr.querySelector('.sp-c')?.value||'';
-    if(!name&&!sal) tr.remove();
+    const upi=tr.querySelector('.supi-c')?.value||'';
+    const cc=tr.querySelector('.scc-c')?.value||'';
+    const qty=tr.querySelector('.sq-c')?.value||'';
+    if(!sal&&!upi&&!cc) tr.remove();
   });
-  renum();calcTotals();calcStaffTotals();
+  // Clean pending bill rows — remove if amount is empty and no name
+  const pbRows=[...document.querySelectorAll('#pbTbody tr')];
+  pbRows.forEach(tr=>{
+    const inputs=tr.querySelectorAll('input');
+    const name=inputs[0]?.value?.trim()||'';
+    const amount=inputs[4]?.value||'';
+    if(!amount&&!name) tr.remove();
+  });
+  renum();calcTotals();calcStaffTotals();updatePBTotals();
   toast('🧹 Empty rows cleaned','info');
 }
 
@@ -2594,6 +2766,7 @@ function addPendingBillRow(data){
 // BATCH LOAD (single cloud request for range)
 // ══════════════════════════════════════════
 async function batchLoadDates(from,to){
+  const allowed=new Set(getDatesInRange(from,to));
   if(GOOGLE_SCRIPT_URL){
     try{
       const resp=await fetch(`${GOOGLE_SCRIPT_URL}?action=loadRange&from=${from}&to=${to}`,{signal:AbortSignal.timeout(15000)});
@@ -2601,9 +2774,8 @@ async function batchLoadDates(from,to){
         const r=await resp.json();
         if(r.status==='ok'&&r.records){
           const map={};
-          r.records.forEach(rec=>{map[rec.date]=rec.data;});
-          // fill gaps from localStorage
-          getDatesInRange(from,to).forEach(date=>{
+          r.records.forEach(rec=>{ if(allowed.has(rec.date)) map[rec.date]=rec.data; });
+          allowed.forEach(date=>{
             if(!map[date]){const raw=localStorage.getItem('csrV6_'+date);if(raw)try{map[date]=JSON.parse(raw);}catch(e){}}
           });
           return map;
@@ -2611,9 +2783,8 @@ async function batchLoadDates(from,to){
       }
     }catch(e){}
   }
-  // pure local
   const map={};
-  getDatesInRange(from,to).forEach(date=>{
+  allowed.forEach(date=>{
     const raw=localStorage.getItem('csrV6_'+date);
     if(raw)try{map[date]=JSON.parse(raw);}catch(e){}
   });
@@ -2633,8 +2804,8 @@ function initHistoryPage(){
   if(!document.getElementById('histFrom').value){
     document.getElementById('histFrom').value=`${y}-${m}-01`;
     document.getElementById('histTo').value=todayStr();
+    loadHistory();
   }
-  loadHistory();
 }
 
 async function loadHistory(){
@@ -2649,12 +2820,12 @@ async function loadHistory(){
   Object.entries(dataMap).sort((a,b)=>a[0].localeCompare(b[0])).forEach(([date,d])=>{
     (d.purchases||[]).forEach(r=>{
       if(!r.en)return;
-      const upi=parseFloat(r.upi)||0,cc=parseFloat(r.cc)||0,csr=parseFloat(r.csr)||0;
+      const upi=parseFloat(r.upi)||0,cc=parseFloat(r.cc)||0;
       const qty=parseFloat(r.qty)||0,rate=parseFloat(r.rate)||0;
-      const tot=(upi+cc+csr)||(qty*rate);
+      const tot=(upi+cc)||(qty*rate);
       if(tot===0&&qty===0)return;
       if(!itemMap[r.en])itemMap[r.en]=[];
-      itemMap[r.en].push({date,qty,unit:r.unit||'',rate,upi,cc,csr,tot});
+      itemMap[r.en].push({date,qty,unit:r.unit||'',rate,upi,cc,tot});
     });
   });
   const filterItems=selectedItem==='__all__'?Object.keys(itemMap):[selectedItem];
@@ -2670,7 +2841,7 @@ async function loadHistory(){
         <thead><tr>
           <th class="th-b" style="text-align:left">Date</th><th class="th-b">Day</th>
           <th class="th-b">Qty</th><th class="th-b">Unit</th><th class="th-b">Rate ₹</th>
-          <th class="th-u">📱 UPI (PP)</th><th class="th-c">💵 CC</th><th class="th-s">👤 CSR</th>
+          <th class="th-u">📱 UPI (PP)</th><th class="th-c">💵 CC</th>
           <th class="th-t">Amount ₹</th>
         </tr></thead>
         <tbody>${rows.map((r,i)=>`<tr style="${i%2?'background:var(--row-alt)':''}">
@@ -2681,14 +2852,12 @@ async function loadHistory(){
           <td class="nc">${r.rate?'₹'+r.rate.toFixed(2):'—'}</td>
           <td class="nc-b">${r.upi?f(r.upi):'—'}</td>
           <td class="nc-o">${r.cc?f(r.cc):'—'}</td>
-          <td class="nc-teal">${r.csr?f(r.csr):'—'}</td>
           <td style="text-align:right"><span class="ppill pos">${f(r.tot)}</span></td>
         </tr>`).join('')}
         <tr style="background:var(--tfoot)">
           <td colspan="5" style="color:var(--gold);font-weight:800;padding:8px 12px">TOTAL (${rows.length})</td>
           <td class="nc-bold" style="color:#A8C8FF">${f(rows.reduce((a,r)=>a+r.upi,0))}</td>
           <td class="nc-bold" style="color:#FFD08A">${f(rows.reduce((a,r)=>a+r.cc,0))}</td>
-          <td class="nc-bold" style="color:#88DD88">${f(rows.reduce((a,r)=>a+r.csr,0))}</td>
           <td style="text-align:right"><span class="ppill pos">${f(totalAmt)}</span></td>
         </tr></tbody>
       </table></div>
@@ -2739,18 +2908,19 @@ async function loadCounter(){
     const totalSales=cash+upi;
     let purTotal=0,salTotal=0;
     (d.purchases||[]).forEach(r=>{
-      const u=parseFloat(r.upi)||0,c=parseFloat(r.cc)||0,cs=parseFloat(r.csr)||0;
-      purTotal+=(u+c+cs)||(parseFloat(r.qty||0)*parseFloat(r.rate||0));
+      const u=parseFloat(r.upi)||0,c=parseFloat(r.cc)||0;
+      purTotal+=(u+c)||(parseFloat(r.qty||0)*parseFloat(r.rate||0));
     });
     (d.staff||[]).forEach(s=>{
-      const u=parseFloat(s.upi)||0,c=parseFloat(s.cc)||0,cs=parseFloat(s.csr)||0;
+      const u=parseFloat(s.upi)||0,c=parseFloat(s.cc)||0;
       const sub=(parseFloat(s.qty||1)*parseFloat(s.salary||0));
-      salTotal+=(u+c+cs)||sub;
+      salTotal+=(u+c)||sub;
     });
     let pendTotal=0;
     (d.pendingBills||[]).forEach(pb=>{pendTotal+=parseFloat(pb.amount)||0;});
     const net=totalSales-purTotal-salTotal-free;
-    dayData.push({date,cash,upi,totalSales,purTotal,salTotal,free,pendTotal,net,
+    const totalUsed=purTotal+salTotal;
+    dayData.push({date,cash,upi,totalSales,purTotal,salTotal,totalUsed,free,pendTotal,net,
       dow:new Date(date+'T00:00:00').toLocaleDateString('en-IN',{weekday:'short'})});
   });
   if(!dayData.length){
@@ -2763,17 +2933,21 @@ async function loadCounter(){
 
 function renderDailyCounter(dayData,cont){
   const sum=k=>dayData.reduce((a,d)=>a+d[k],0);
-  const tSales=sum('totalSales'),tPur=sum('purTotal'),tSal=sum('salTotal'),tNet=sum('net');
+  const tSales=sum('totalSales'),tPur=sum('purTotal'),tSal=sum('salTotal'),tUsed=sum('totalUsed'),tNet=sum('net');
   const netCol=tNet>=0?'#22C55E':'#EF4444';
   cont.innerHTML=`
   <div class="stat-grid" style="margin-bottom:18px">
     <div class="sc rev"><div class="sc-icon">💰</div><div class="sc-lbl">Total Sales</div><div class="sc-val">₹${tSales.toLocaleString('en-IN',{maximumFractionDigits:0})}</div></div>
+    <div class="sc exp"><div class="sc-icon">💸</div><div class="sc-lbl">Total Usage</div><div class="sc-val">₹${tUsed.toLocaleString('en-IN',{maximumFractionDigits:0})}</div><div class="sc-sub">Purchases + Salaries</div></div>
     <div class="sc exp"><div class="sc-icon">🛒</div><div class="sc-lbl">Total Purchases</div><div class="sc-val">₹${tPur.toLocaleString('en-IN',{maximumFractionDigits:0})}</div></div>
     <div class="sc exp"><div class="sc-icon">👥</div><div class="sc-lbl">Total Salaries</div><div class="sc-val">₹${tSal.toLocaleString('en-IN',{maximumFractionDigits:0})}</div></div>
     <div class="sc ${tNet>=0?'pro':'los'}"><div class="sc-icon">${tNet>=0?'📈':'📉'}</div><div class="sc-lbl">Net ${tNet>=0?'Profit':'Loss'}</div><div class="sc-val" style="color:${netCol}">₹${Math.abs(tNet).toLocaleString('en-IN',{maximumFractionDigits:0})}</div></div>
   </div>
   <div class="dlog">
-    <div class="dlog-hd"><h4>Daily Counter Summary</h4><p>Sales, Purchases, Salaries and Net Profit per day</p></div>
+    <div class="dlog-hd" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px">
+      <div><h4>Daily Counter Summary</h4><p>Usage = Purchases + Salaries</p></div>
+      <button onclick="exportCounterCSV()" style="background:var(--accent);color:#000;border:none;border-radius:8px;padding:6px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap">⬇ Export CSV</button>
+    </div>
     <div class="tab-wrap"><table>
       <thead><tr>
         <th class="th-b" style="text-align:left">Date</th>
@@ -2781,6 +2955,7 @@ function renderDailyCounter(dayData,cont){
         <th class="th-u">Cash ₹</th>
         <th class="th-u">UPI ₹</th>
         <th class="th-t">Sales ₹</th>
+        <th class="th-c">Usage ₹</th>
         <th class="th-c">Purchases ₹</th>
         <th class="th-c">Salaries ₹</th>
         <th class="th-c">Free Bill ₹</th>
@@ -2794,6 +2969,7 @@ function renderDailyCounter(dayData,cont){
           <td class="nc">₹${d.cash.toLocaleString('en-IN',{maximumFractionDigits:0})}</td>
           <td class="nc-b">₹${d.upi.toLocaleString('en-IN',{maximumFractionDigits:0})}</td>
           <td class="nc-bold" style="color:var(--gold)">₹${d.totalSales.toLocaleString('en-IN',{maximumFractionDigits:0})}</td>
+          <td class="nc-bold" style="color:#FCD34D">₹${d.totalUsed.toLocaleString('en-IN',{maximumFractionDigits:0})}</td>
           <td class="nc-o">₹${d.purTotal.toLocaleString('en-IN',{maximumFractionDigits:0})}</td>
           <td class="nc-o">₹${d.salTotal.toLocaleString('en-IN',{maximumFractionDigits:0})}</td>
           <td class="nc-r">${d.free?'₹'+d.free.toLocaleString('en-IN',{maximumFractionDigits:0}):'—'}</td>
@@ -2806,6 +2982,7 @@ function renderDailyCounter(dayData,cont){
         <td class="nc-bold">₹${sum('cash').toLocaleString('en-IN',{maximumFractionDigits:0})}</td>
         <td class="nc-bold" style="color:#A8C8FF">₹${sum('upi').toLocaleString('en-IN',{maximumFractionDigits:0})}</td>
         <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:800;color:var(--gold)">₹${tSales.toLocaleString('en-IN',{maximumFractionDigits:0})}</td>
+        <td class="nc-bold" style="color:#FCD34D">₹${tUsed.toLocaleString('en-IN',{maximumFractionDigits:0})}</td>
         <td class="nc-bold" style="color:#FFD08A">₹${tPur.toLocaleString('en-IN',{maximumFractionDigits:0})}</td>
         <td class="nc-bold" style="color:#FFD08A">₹${tSal.toLocaleString('en-IN',{maximumFractionDigits:0})}</td>
         <td class="nc-bold" style="color:#FCA5A5">₹${sum('free').toLocaleString('en-IN',{maximumFractionDigits:0})}</td>
@@ -2817,14 +2994,13 @@ function renderDailyCounter(dayData,cont){
 }
 
 function renderMonthlyCounter(dayData,cont){
-  // Group by month
   const months={};
   dayData.forEach(d=>{
     const mk=d.date.substring(0,7);
-    if(!months[mk]) months[mk]={month:mk,days:0,totalSales:0,purTotal:0,salTotal:0,free:0,pendTotal:0,net:0};
+    if(!months[mk]) months[mk]={month:mk,days:0,totalSales:0,purTotal:0,salTotal:0,totalUsed:0,free:0,pendTotal:0,net:0};
     const m=months[mk];
     m.days++;m.totalSales+=d.totalSales;m.purTotal+=d.purTotal;
-    m.salTotal+=d.salTotal;m.free+=d.free;m.pendTotal+=d.pendTotal;m.net+=d.net;
+    m.salTotal+=d.salTotal;m.totalUsed+=d.totalUsed;m.free+=d.free;m.pendTotal+=d.pendTotal;m.net+=d.net;
   });
   const mArr=Object.values(months).sort((a,b)=>a.month.localeCompare(b.month));
   const sum=k=>mArr.reduce((a,m)=>a+m[k],0);
@@ -2832,16 +3008,21 @@ function renderMonthlyCounter(dayData,cont){
   cont.innerHTML=`
   <div class="stat-grid" style="margin-bottom:18px">
     <div class="sc rev"><div class="sc-icon">💰</div><div class="sc-lbl">Total Sales</div><div class="sc-val">₹${sum('totalSales').toLocaleString('en-IN',{maximumFractionDigits:0})}</div></div>
+    <div class="sc exp"><div class="sc-icon">💸</div><div class="sc-lbl">Total Usage</div><div class="sc-val">₹${sum('totalUsed').toLocaleString('en-IN',{maximumFractionDigits:0})}</div></div>
     <div class="sc exp"><div class="sc-icon">🛒</div><div class="sc-lbl">Total Purchases</div><div class="sc-val">₹${sum('purTotal').toLocaleString('en-IN',{maximumFractionDigits:0})}</div></div>
     <div class="sc ${tNet>=0?'pro':'los'}"><div class="sc-icon">${tNet>=0?'📈':'📉'}</div><div class="sc-lbl">Net ${tNet>=0?'Profit':'Loss'}</div><div class="sc-val" style="color:${tNet>=0?'#22C55E':'#EF4444'}">₹${Math.abs(tNet).toLocaleString('en-IN',{maximumFractionDigits:0})}</div></div>
   </div>
   <div class="dlog">
-    <div class="dlog-hd"><h4>Monthly Counter Summary</h4></div>
+    <div class="dlog-hd" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px">
+      <div><h4>Monthly Counter Summary</h4></div>
+      <button onclick="exportCounterCSV()" style="background:var(--accent);color:#000;border:none;border-radius:8px;padding:6px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap">⬇ Export CSV</button>
+    </div>
     <div class="tab-wrap"><table>
       <thead><tr>
         <th class="th-b" style="text-align:left">Month</th>
         <th class="th-b">Days</th>
         <th class="th-t">Sales ₹</th>
+        <th class="th-c">Usage ₹</th>
         <th class="th-c">Purchases ₹</th>
         <th class="th-c">Salaries ₹</th>
         <th class="th-c">Free Bill ₹</th>
@@ -2852,6 +3033,7 @@ function renderMonthlyCounter(dayData,cont){
           <td style="font-family:'DM Mono',monospace;font-weight:700">${m.month}</td>
           <td style="text-align:center;color:var(--muted)">${m.days}</td>
           <td class="nc-bold" style="color:var(--gold)">₹${m.totalSales.toLocaleString('en-IN',{maximumFractionDigits:0})}</td>
+          <td class="nc-bold" style="color:#FCD34D">₹${m.totalUsed.toLocaleString('en-IN',{maximumFractionDigits:0})}</td>
           <td class="nc-o">₹${m.purTotal.toLocaleString('en-IN',{maximumFractionDigits:0})}</td>
           <td class="nc-o">₹${m.salTotal.toLocaleString('en-IN',{maximumFractionDigits:0})}</td>
           <td class="nc-r">${m.free?'₹'+m.free.toLocaleString('en-IN',{maximumFractionDigits:0}):'—'}</td>
@@ -2881,60 +3063,85 @@ async function loadFinance(){
   const cont=document.getElementById('financeContent');
   cont.innerHTML='<div class="no-data"><div class="nd-ico">⏳</div><h3>Loading…</h3></div>';
   const dataMap=await batchLoadDates(from,to);
-  const dayData=[];
-  Object.entries(dataMap).sort((a,b)=>a[0].localeCompare(b[0])).forEach(([date,d])=>{
-    const sv=d.sales||{};
-    const openUPI=parseFloat(sv.openUPI)||0,openCC=parseFloat(sv.openCC)||0,openCSR=parseFloat(sv.openCSR)||0;
-    const totalOpen=openUPI+openCC+openCSR;
-    let usedUPI=0,usedCC=0,usedCSR=0;
-    (d.purchases||[]).forEach(r=>{usedUPI+=parseFloat(r.upi)||0;usedCC+=parseFloat(r.cc)||0;usedCSR+=parseFloat(r.csr)||0;});
-    (d.staff||[]).forEach(s=>{usedUPI+=parseFloat(s.upi)||0;usedCC+=parseFloat(s.cc)||0;usedCSR+=parseFloat(s.csr)||0;});
-    const totalUsed=usedUPI+usedCC+usedCSR;
-    dayData.push({date,openUPI,openCC,openCSR,totalOpen,usedUPI,usedCC,usedCSR,totalUsed,
-      balUPI:openUPI-usedUPI,balCC:openCC-usedCC,balCSR:openCSR-usedCSR,totalBal:totalOpen-totalUsed});
-  });
-  if(!dayData.length){
-    cont.innerHTML='<div class="no-data"><div class="nd-ico">📭</div><h3>No data for this period</h3><p>Enter Opening Balances in the Daily Sheet each morning</p></div>';
+
+  // Sort dates ascending — critical for carry-forward logic
+  const sortedDates=Object.keys(dataMap).sort();
+  if(!sortedDates.length){
+    cont.innerHTML='<div class="no-data"><div class="nd-ico">📭</div><h3>No data for this period</h3><p>Save daily sheets first</p></div>';
     return;
   }
+
+  // Build day rows with auto-calculated running balances
+  let prevBalUPI=0,prevBalCC=0;
+  const dayData=sortedDates.map(date=>{
+    const d=dataMap[date];
+    const sv=d.sales||{};
+    const cashColl=parseFloat(sv.cashColl)||0;
+    const upiColl=parseFloat(sv.upiColl)||0;
+    const totalColl=cashColl+upiColl;
+
+    // Used per mode across purchases + salaries
+    let usedUPI=0,usedCC=0;
+    (d.purchases||[]).forEach(r=>{usedUPI+=parseFloat(r.upi)||0;usedCC+=parseFloat(r.cc)||0;});
+    (d.staff||[]).forEach(s=>{usedUPI+=parseFloat(s.upi)||0;usedCC+=parseFloat(s.cc)||0;});
+    const totalUsed=usedUPI+usedCC;
+
+    // Opening = previous day's closing
+    const openUPI=prevBalUPI;
+    const openCC=prevBalCC;
+    const totalOpen=openUPI+openCC;
+
+    // Closing = Opening + Collection - Usage (per mode)
+    const balUPI=openUPI+upiColl-usedUPI;
+    const balCC=openCC+cashColl-usedCC;
+    const totalBal=balUPI+balCC;
+
+    // Carry forward
+    prevBalUPI=balUPI;
+    prevBalCC=balCC;
+
+    return {date,openUPI,openCC,totalOpen,cashColl,upiColl,totalColl,usedUPI,usedCC,totalUsed,balUPI,balCC,totalBal};
+  });
+
   if(viewMode==='monthly') renderMonthlyFinance(dayData,cont);
   else renderDailyFinance(dayData,cont);
 }
 
 function finFmt(v){return '₹'+Math.abs(v).toLocaleString('en-IN',{maximumFractionDigits:0});}
 function finBal(v){
-  const col=v>=0?'#22C55E':'#EF4444';
+  const col=v>=0?'#16A34A':'#DC2626';
   const sign=v>=0?'+':'-';
   return `<span style="color:${col};font-weight:800;font-family:'DM Mono',monospace">${sign}₹${Math.abs(v).toLocaleString('en-IN',{maximumFractionDigits:0})}</span>`;
 }
 
 function renderDailyFinance(dayData,cont){
   const sum=k=>dayData.reduce((a,d)=>a+d[k],0);
-  const totO=sum('totalOpen'),totU=sum('totalUsed'),totB=sum('totalBal');
   cont.innerHTML=`
     <div class="stat-grid" style="margin-bottom:18px">
-      <div class="sc rev"><div class="sc-icon">🌅</div><div class="sc-lbl">Total Opening</div><div class="sc-val">${finFmt(totO)}</div></div>
-      <div class="sc exp"><div class="sc-icon">💸</div><div class="sc-lbl">Total Used</div><div class="sc-val">${finFmt(totU)}</div></div>
-      <div class="sc ${totB>=0?'pro':'los'}"><div class="sc-icon">🏦</div><div class="sc-lbl">Net Closing Balance</div><div class="sc-val">${finFmt(totB)}</div></div>
+      <div class="sc rev"><div class="sc-icon">💰</div><div class="sc-lbl">Total Collection</div><div class="sc-val">${finFmt(sum('totalColl'))}</div><div class="sc-sub">Cash + UPI</div></div>
+      <div class="sc exp"><div class="sc-icon">💸</div><div class="sc-lbl">Total Used</div><div class="sc-val">${finFmt(sum('totalUsed'))}</div><div class="sc-sub">Purchases + Salaries</div></div>
+      <div class="sc pro"><div class="sc-icon">🏦</div><div class="sc-lbl">Closing Balance</div><div class="sc-val">${finFmt(dayData[dayData.length-1].totalBal)}</div><div class="sc-sub">Latest day</div></div>
     </div>
     <div class="dlog">
-      <div class="dlog-hd"><h4>Daily Finance Tracker</h4><p>Closing Balance = Opening − Used. Green = positive, Red = overdrawn.</p></div>
+      <div class="dlog-hd" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <div><h4>Daily Finance Tracker</h4><p>Opening = previous day's closing. Balance = Opening + Collection − Usage. Auto-calculated.</p></div>
+        <button onclick="exportFinanceCSV()" style="background:var(--accent);color:#000;border:none;border-radius:8px;padding:6px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap">⬇ Export CSV</button>
+      </div>
       <div class="tab-wrap"><table>
         <thead>
           <tr>
             <th class="th-b" rowspan="2" style="text-align:left;vertical-align:middle">Date</th>
-            <th class="th-b" rowspan="2" style="text-align:center;vertical-align:middle">Day</th>
+            <th class="th-b" rowspan="2" style="vertical-align:middle">Day</th>
             <th class="th-u" colspan="3" style="text-align:center">🌅 Opening</th>
-            <th class="th-b" rowspan="2" style="vertical-align:middle">Open Total</th>
+            <th class="th-t" colspan="3" style="text-align:center">💰 Collection</th>
             <th class="th-c" colspan="3" style="text-align:center">💸 Used</th>
-            <th class="th-b" rowspan="2" style="vertical-align:middle">Used Total</th>
             <th class="th-s" colspan="3" style="text-align:center">🏦 Balance</th>
-            <th class="th-t" rowspan="2" style="vertical-align:middle">Bal Total</th>
           </tr>
           <tr>
-            <th class="th-u" style="font-size:9px">UPI</th><th class="th-u" style="font-size:9px">CC</th><th class="th-u" style="font-size:9px">CSR</th>
-            <th class="th-c" style="font-size:9px">UPI</th><th class="th-c" style="font-size:9px">CC</th><th class="th-c" style="font-size:9px">CSR</th>
-            <th class="th-s" style="font-size:9px">UPI</th><th class="th-s" style="font-size:9px">CC</th><th class="th-s" style="font-size:9px">CSR</th>
+            <th class="th-u" style="font-size:9px">UPI</th><th class="th-u" style="font-size:9px">CC</th><th class="th-u" style="font-size:9px">Total</th>
+            <th class="th-t" style="font-size:9px">UPI</th><th class="th-t" style="font-size:9px">Cash</th><th class="th-t" style="font-size:9px">Total</th>
+            <th class="th-c" style="font-size:9px">UPI</th><th class="th-c" style="font-size:9px">CC</th><th class="th-c" style="font-size:9px">Total</th>
+            <th class="th-s" style="font-size:9px">UPI</th><th class="th-s" style="font-size:9px">CC</th><th class="th-t" style="font-size:9px">Total</th>
           </tr>
         </thead>
         <tbody>
@@ -2943,119 +3150,105 @@ function renderDailyFinance(dayData,cont){
             <td style="font-size:10px;color:var(--muted);text-align:center">${new Date(d.date+'T00:00:00').toLocaleDateString('en-IN',{weekday:'short'})}</td>
             <td style="text-align:right;font-family:'DM Mono',monospace;color:#A8C8FF;font-size:11px">${finFmt(d.openUPI)}</td>
             <td style="text-align:right;font-family:'DM Mono',monospace;color:#A8C8FF;font-size:11px">${finFmt(d.openCC)}</td>
-            <td style="text-align:right;font-family:'DM Mono',monospace;color:#A8C8FF;font-size:11px">${finFmt(d.openCSR)}</td>
             <td class="nc-bold" style="color:var(--gold)">${finFmt(d.totalOpen)}</td>
+            <td style="text-align:right;font-family:'DM Mono',monospace;color:#6EE7B7;font-size:11px">${finFmt(d.upiColl)}</td>
+            <td style="text-align:right;font-family:'DM Mono',monospace;color:#6EE7B7;font-size:11px">${finFmt(d.cashColl)}</td>
+            <td class="nc-bold" style="color:#6EE7B7">${finFmt(d.totalColl)}</td>
             <td style="text-align:right;font-family:'DM Mono',monospace;color:#FFD08A;font-size:11px">${finFmt(d.usedUPI)}</td>
             <td style="text-align:right;font-family:'DM Mono',monospace;color:#FFD08A;font-size:11px">${finFmt(d.usedCC)}</td>
-            <td style="text-align:right;font-family:'DM Mono',monospace;color:#FFD08A;font-size:11px">${finFmt(d.usedCSR)}</td>
             <td class="nc-bold">${finFmt(d.totalUsed)}</td>
             <td style="text-align:right">${finBal(d.balUPI)}</td>
             <td style="text-align:right">${finBal(d.balCC)}</td>
-            <td style="text-align:right">${finBal(d.balCSR)}</td>
             <td style="text-align:right">${finBal(d.totalBal)}</td>
           </tr>`).join('')}
         </tbody>
         <tfoot><tr style="background:var(--tfoot)">
           <td colspan="2" style="color:var(--gold);font-weight:800;font-size:12px;padding:9px 12px">TOTALS</td>
-          <td class="nc-bold" style="color:#A8C8FF">${finFmt(sum('openUPI'))}</td>
-          <td class="nc-bold" style="color:#A8C8FF">${finFmt(sum('openCC'))}</td>
-          <td class="nc-bold" style="color:#A8C8FF">${finFmt(sum('openCSR'))}</td>
-          <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:800;color:var(--gold)">${finFmt(totO)}</td>
+          <td colspan="3" style="text-align:center;color:var(--muted);font-size:11px">—</td>
+          <td class="nc-bold" style="color:#6EE7B7">${finFmt(sum('upiColl'))}</td>
+          <td class="nc-bold" style="color:#6EE7B7">${finFmt(sum('cashColl'))}</td>
+          <td class="nc-bold" style="color:#6EE7B7">${finFmt(sum('totalColl'))}</td>
           <td class="nc-bold" style="color:#FFD08A">${finFmt(sum('usedUPI'))}</td>
           <td class="nc-bold" style="color:#FFD08A">${finFmt(sum('usedCC'))}</td>
-          <td class="nc-bold" style="color:#FFD08A">${finFmt(sum('usedCSR'))}</td>
-          <td class="nc-bold">${finFmt(totU)}</td>
-          <td style="text-align:right">${finBal(sum('balUPI'))}</td>
-          <td style="text-align:right">${finBal(sum('balCC'))}</td>
-          <td style="text-align:right">${finBal(sum('balCSR'))}</td>
-          <td style="text-align:right">${finBal(totB)}</td>
+          <td class="nc-bold">${finFmt(sum('totalUsed'))}</td>
+          <td style="text-align:right">${finBal(dayData[dayData.length-1].balUPI)}</td>
+          <td style="text-align:right">${finBal(dayData[dayData.length-1].balCC)}</td>
+          <td style="text-align:right">${finBal(dayData[dayData.length-1].totalBal)}</td>
         </tr></tfoot>
       </table></div>
     </div>`;
 }
 
 function renderMonthlyFinance(dayData,cont){
+  // Group and keep last-day balance per month for closing balance
   const monthMap={};
   dayData.forEach(d=>{
     const mk=d.date.slice(0,7);
-    if(!monthMap[mk])monthMap[mk]={month:mk,openUPI:0,openCC:0,openCSR:0,totalOpen:0,usedUPI:0,usedCC:0,usedCSR:0,totalUsed:0,days:0};
+    if(!monthMap[mk])monthMap[mk]={month:mk,days:0,cashColl:0,upiColl:0,totalColl:0,usedUPI:0,usedCC:0,totalUsed:0,lastBal:d};
     const m=monthMap[mk];
-    ['openUPI','openCC','openCSR','totalOpen','usedUPI','usedCC','usedCSR','totalUsed'].forEach(k=>m[k]+=d[k]);
-    m.days++;
+    m.days++;m.cashColl+=d.cashColl;m.upiColl+=d.upiColl;m.totalColl+=d.totalColl;
+    m.usedUPI+=d.usedUPI;m.usedCC+=d.usedCC;m.totalUsed+=d.totalUsed;
+    m.lastBal=d; // last day of month = closing balance
   });
-  // Month-end balance = last day of each month
-  const monthEnd={};
-  dayData.forEach(d=>{monthEnd[d.date.slice(0,7)]=d;});
   const months=Object.values(monthMap).sort((a,b)=>a.month.localeCompare(b.month));
-  const mn=ym=>{const[y,m]=ym.split('-');return new Date(+y,+m-1,1).toLocaleDateString('en-IN',{month:'long',year:'numeric'});};
   const sum=k=>months.reduce((a,m)=>a+m[k],0);
-  const totO=sum('totalOpen'),totU=sum('totalUsed');
-  const totBal=Object.values(monthEnd).reduce((a,d)=>a+d.totalBal,0);
-
+  const mn=ym=>{const[y,m]=ym.split('-');return new Date(+y,+m-1,1).toLocaleDateString('en-IN',{month:'long',year:'numeric'});};
   cont.innerHTML=`
     <div class="stat-grid" style="margin-bottom:18px">
-      <div class="sc rev"><div class="sc-icon">🌅</div><div class="sc-lbl">Total Opening</div><div class="sc-val">${finFmt(totO)}</div></div>
-      <div class="sc exp"><div class="sc-icon">💸</div><div class="sc-lbl">Total Used</div><div class="sc-val">${finFmt(totU)}</div></div>
-      <div class="sc ${totBal>=0?'pro':'los'}"><div class="sc-icon">🏦</div><div class="sc-lbl">Month-end Balance</div><div class="sc-val">${finFmt(totBal)}</div></div>
+      <div class="sc rev"><div class="sc-icon">💰</div><div class="sc-lbl">Total Collection</div><div class="sc-val">${finFmt(sum('totalColl'))}</div></div>
+      <div class="sc exp"><div class="sc-icon">💸</div><div class="sc-lbl">Total Used</div><div class="sc-val">${finFmt(sum('totalUsed'))}</div></div>
+      <div class="sc pro"><div class="sc-icon">🏦</div><div class="sc-lbl">Latest Balance</div><div class="sc-val">${finFmt(dayData[dayData.length-1].totalBal)}</div></div>
     </div>
     <div class="dlog">
-      <div class="dlog-hd"><h4>Monthly Finance Summary</h4><p>Month-end Closing Balance = last day of each month’s closing balance.</p></div>
+      <div class="dlog-hd" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <div><h4>Monthly Finance Summary</h4><p>Month-end closing balance = last day of each month.</p></div>
+        <button onclick="exportFinanceCSV()" style="background:var(--accent);color:#000;border:none;border-radius:8px;padding:6px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap">⬇ Export CSV</button>
+      </div>
       <div class="tab-wrap"><table>
         <thead>
           <tr>
             <th class="th-b" rowspan="2" style="text-align:left;min-width:130px;vertical-align:middle">Month</th>
             <th class="th-b" rowspan="2" style="vertical-align:middle">Days</th>
-            <th class="th-u" colspan="4" style="text-align:center">🌅 Opening (sum)</th>
-            <th class="th-c" colspan="4" style="text-align:center">💸 Used (sum)</th>
-            <th class="th-s" colspan="4" style="text-align:center">🏦 Month-end Closing</th>
+            <th class="th-t" colspan="3" style="text-align:center">💰 Collection</th>
+            <th class="th-c" colspan="3" style="text-align:center">💸 Used</th>
+            <th class="th-s" colspan="3" style="text-align:center">🏦 Month-end Balance</th>
           </tr>
           <tr>
-            <th class="th-u" style="font-size:9px">UPI</th><th class="th-u" style="font-size:9px">CC</th>
-            <th class="th-u" style="font-size:9px">CSR</th><th class="th-u" style="font-size:9px">Total</th>
-            <th class="th-c" style="font-size:9px">UPI</th><th class="th-c" style="font-size:9px">CC</th>
-            <th class="th-c" style="font-size:9px">CSR</th><th class="th-c" style="font-size:9px">Total</th>
-            <th class="th-s" style="font-size:9px">UPI</th><th class="th-s" style="font-size:9px">CC</th>
-            <th class="th-s" style="font-size:9px">CSR</th><th class="th-t" style="font-size:9px">Total</th>
+            <th class="th-t" style="font-size:9px">UPI</th><th class="th-t" style="font-size:9px">Cash</th><th class="th-t" style="font-size:9px">Total</th>
+            <th class="th-c" style="font-size:9px">UPI</th><th class="th-c" style="font-size:9px">CC</th><th class="th-c" style="font-size:9px">Total</th>
+            <th class="th-s" style="font-size:9px">UPI</th><th class="th-s" style="font-size:9px">CC</th><th class="th-t" style="font-size:9px">Total</th>
           </tr>
         </thead>
         <tbody>
-          ${months.map((m,i)=>{
-            const eb=monthEnd[m.month]||{balUPI:0,balCC:0,balCSR:0,totalBal:0};
-            return `<tr style="${i%2?'background:var(--row-alt)':''}">
-              <td style="font-weight:700;color:var(--accent)">${mn(m.month)}</td>
-              <td style="text-align:center;color:var(--muted);font-size:11px">${m.days}</td>
-              <td style="text-align:right;font-family:'DM Mono',monospace;color:#A8C8FF;font-size:11px">${finFmt(m.openUPI)}</td>
-              <td style="text-align:right;font-family:'DM Mono',monospace;color:#A8C8FF;font-size:11px">${finFmt(m.openCC)}</td>
-              <td style="text-align:right;font-family:'DM Mono',monospace;color:#A8C8FF;font-size:11px">${finFmt(m.openCSR)}</td>
-              <td class="nc-bold" style="color:var(--gold)">${finFmt(m.totalOpen)}</td>
-              <td style="text-align:right;font-family:'DM Mono',monospace;color:#FFD08A;font-size:11px">${finFmt(m.usedUPI)}</td>
-              <td style="text-align:right;font-family:'DM Mono',monospace;color:#FFD08A;font-size:11px">${finFmt(m.usedCC)}</td>
-              <td style="text-align:right;font-family:'DM Mono',monospace;color:#FFD08A;font-size:11px">${finFmt(m.usedCSR)}</td>
-              <td class="nc-bold">${finFmt(m.totalUsed)}</td>
-              <td style="text-align:right">${finBal(eb.balUPI)}</td>
-              <td style="text-align:right">${finBal(eb.balCC)}</td>
-              <td style="text-align:right">${finBal(eb.balCSR)}</td>
-              <td style="text-align:right">${finBal(eb.totalBal)}</td>
-            </tr>`;
-          }).join('')}
+          ${months.map((m,i)=>`<tr style="${i%2?'background:var(--row-alt)':''}">
+            <td style="font-weight:700;color:var(--accent)">${mn(m.month)}</td>
+            <td style="text-align:center;color:var(--muted)">${m.days}</td>
+            <td style="text-align:right;font-family:'DM Mono',monospace;color:#6EE7B7;font-size:11px">${finFmt(m.upiColl)}</td>
+            <td style="text-align:right;font-family:'DM Mono',monospace;color:#6EE7B7;font-size:11px">${finFmt(m.cashColl)}</td>
+            <td class="nc-bold" style="color:#6EE7B7">${finFmt(m.totalColl)}</td>
+            <td style="text-align:right;font-family:'DM Mono',monospace;color:#FFD08A;font-size:11px">${finFmt(m.usedUPI)}</td>
+            <td style="text-align:right;font-family:'DM Mono',monospace;color:#FFD08A;font-size:11px">${finFmt(m.usedCC)}</td>
+            <td class="nc-bold">${finFmt(m.totalUsed)}</td>
+            <td style="text-align:right">${finBal(m.lastBal.balUPI)}</td>
+            <td style="text-align:right">${finBal(m.lastBal.balCC)}</td>
+            <td style="text-align:right">${finBal(m.lastBal.totalBal)}</td>
+          </tr>`).join('')}
         </tbody>
         <tfoot><tr style="background:var(--tfoot)">
           <td colspan="2" style="color:var(--gold);font-weight:800;padding:9px 12px">GRAND TOTAL</td>
-          <td class="nc-bold" style="color:#A8C8FF">${finFmt(sum('openUPI'))}</td>
-          <td class="nc-bold" style="color:#A8C8FF">${finFmt(sum('openCC'))}</td>
-          <td class="nc-bold" style="color:#A8C8FF">${finFmt(sum('openCSR'))}</td>
-          <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:800;color:var(--gold)">${finFmt(totO)}</td>
+          <td class="nc-bold" style="color:#6EE7B7">${finFmt(sum('upiColl'))}</td>
+          <td class="nc-bold" style="color:#6EE7B7">${finFmt(sum('cashColl'))}</td>
+          <td class="nc-bold" style="color:#6EE7B7">${finFmt(sum('totalColl'))}</td>
           <td class="nc-bold" style="color:#FFD08A">${finFmt(sum('usedUPI'))}</td>
           <td class="nc-bold" style="color:#FFD08A">${finFmt(sum('usedCC'))}</td>
-          <td class="nc-bold" style="color:#FFD08A">${finFmt(sum('usedCSR'))}</td>
-          <td class="nc-bold">${finFmt(totU)}</td>
-          <td colspan="3" style="text-align:center;color:var(--muted);font-size:11px">See last row above →</td>
-          <td style="text-align:right">${finBal(totBal)}</td>
+          <td class="nc-bold">${finFmt(sum('totalUsed'))}</td>
+          <td style="text-align:right">${finBal(dayData[dayData.length-1].balUPI)}</td>
+          <td style="text-align:right">${finBal(dayData[dayData.length-1].balCC)}</td>
+          <td style="text-align:right">${finBal(dayData[dayData.length-1].totalBal)}</td>
         </tr></tfoot>
       </table></div>
     </div>`;
 }
-
 
 // ══════════════════════════════════════════
 // HELPERS (continued)
@@ -3080,8 +3273,62 @@ window.addEventListener('DOMContentLoaded',()=>{
   }
 });
 window.addEventListener('resize',()=>{
-  if(currentTab==='analytics'&&!document.getElementById('analyticsContent').querySelector('.no-data'))loadAnalytics();
+  if(currentTab==='analytics'&&window._lastAnalyticsDays?.length){
+    const days=window._lastAnalyticsDays;
+    const tUPI=days.reduce((a,d)=>a+d.tUPI,0),tCC=days.reduce((a,d)=>a+d.tCC,0);
+    const totPur=days.reduce((a,d)=>a+d.tPur,0),totSal=days.reduce((a,d)=>a+d.tSal,0);
+    requestAnimationFrame(()=>{
+      drawRevExp(days);drawNet(days);
+      drawDonut(tUPI,tCC,totPur);
+      drawCat(totPur,totSal,days.reduce((a,d)=>a+(d.tFree||0),0));
+    });
+  }
 });
+
+function exportCounterCSV(){
+  const cont=document.getElementById('counterContent');
+  if(!cont||!cont.querySelector('table')){toast('Load counter data first','warn');return;}
+  const viewMode=document.getElementById('counterView').value;
+  const from=document.getElementById('counterFrom').value;
+  const to=document.getElementById('counterTo').value;
+  const rows=[...cont.querySelectorAll('tbody tr')];
+  let hdr,data;
+  if(viewMode==='daily'){
+    hdr=['Date','Day','Cash','UPI','Sales','Usage','Purchases','Salaries','Free Bill','Pending','Net'];
+    data=rows.map(tr=>[...tr.querySelectorAll('td')].map(td=>td.textContent.trim().replace(/[₹+−,]/g,'')));
+  } else {
+    hdr=['Month','Days','Sales','Usage','Purchases','Salaries','Free Bill','Net'];
+    data=rows.map(tr=>[...tr.querySelectorAll('td')].map(td=>td.textContent.trim().replace(/[₹+−,]/g,'')));
+  }
+  const csv=[hdr,...data].map(r=>r.join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='CSR_Counter_'+viewMode+'_'+from+'_to_'+to+'.csv';
+  a.click();
+  toast('📥 Counter CSV downloaded!','success');
+}
+
+function exportFinanceCSV(){
+  const cont=document.getElementById('financeContent');
+  if(!cont||!cont.querySelector('table')){toast('Load finance data first','warn');return;}
+  const viewMode=document.getElementById('financeView').value;
+  const from=document.getElementById('financeFrom').value;
+  const to=document.getElementById('financeTo').value;
+  const rows=[...cont.querySelectorAll('tbody tr')];
+  let hdr;
+  if(viewMode==='daily'){
+    hdr=['Date','Day','Open UPI','Open CC','Open Total','Coll UPI','Coll Cash','Coll Total','Used UPI','Used CC','Used Total','Bal UPI','Bal CC','Bal Total'];
+  } else {
+    hdr=['Month','Days','Coll UPI','Coll Cash','Coll Total','Used UPI','Used CC','Used Total','Bal UPI','Bal CC','Bal Total'];
+  }
+  const data=rows.map(tr=>[...tr.querySelectorAll('td')].map(td=>td.textContent.trim().replace(/[₹+−,]/g,'')));
+  const csv=[hdr,...data].map(r=>r.join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='CSR_Finance_'+viewMode+'_'+from+'_to_'+to+'.csv';
+  a.click();
+  toast('📥 Finance CSV downloaded!','success');
+}
 
 </script>
 </body>
