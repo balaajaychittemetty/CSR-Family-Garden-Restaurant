@@ -16,6 +16,12 @@ const SUPPORT_PHONE    = '+91 92926 52566'; // ← Change to your support number
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxlptm6iAd3Z_Ym8CvlRvKjQI_5kRazi7uBqCi_oQXyJyd9dphuKyx7-Wp-3G9lAZLhvA/exec';
 // Paste your Apps Script web app URL above ↑
 // See SETUP_GUIDE.txt for step-by-step instructions
+const BRANCH_ID = 'main';        // Change to 'branch2' for second location
+const BRANCH_NAME = 'CSR Family Garden Restaurant';  // Shown in header & PDF
+  document.addEventListener('DOMContentLoaded',()=>{
+    const bn=document.getElementById('brandName');
+    if(bn)bn.textContent=BRANCH_NAME;
+  });
 </script>
 
 <style>
@@ -274,7 +280,43 @@ tfoot td{background:var(--tfoot)!important;font-family:'DM Mono',monospace;font-
 .del-btn{background:none;border:none;color:#C05040;cursor:pointer;font-size:13px;padding:3px 6px;border-radius:4px;transition:all .14s;opacity:.55;}
 .del-btn:hover{background:rgba(192,80,64,.12);opacity:1;}
 .del-btn:disabled{opacity:.2;cursor:default;}
-.add-row-bar{padding:9px 16px;border-top:1px dashed var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+/* ── OFFLINE BANNER ── */
+.offline-banner{display:none;position:sticky;top:0;z-index:9000;background:#7C2D12;border-bottom:2px solid #DC2626;padding:8px 18px;font-size:11px;font-weight:700;color:#FCA5A5;text-align:center;letter-spacing:.3px;}
+.offline-banner.show{display:block;}
+
+/* ── CASHIER CHECKLIST ── */
+.chk-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:8px;margin-top:10px;padding:0 18px 16px;}
+.chk-item{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;cursor:pointer;transition:all .15s;user-select:none;}
+.chk-item.checked{background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.4);}
+.chk-item input[type=checkbox]{width:16px;height:16px;accent-color:#4ADE80;cursor:pointer;flex-shrink:0;}
+.chk-item label{font-size:11px;font-weight:600;color:var(--text2);cursor:pointer;pointer-events:none;}
+.chk-item.checked label{color:#4ADE80;}
+
+/* ── NOTES QUICK CHIPS ── */
+.notes-chips{display:flex;flex-wrap:wrap;gap:6px;padding:8px 18px 4px;}
+.notes-chip{padding:4px 10px;border-radius:14px;font-size:10px;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:var(--surface2);color:var(--muted);transition:all .15s;}
+.notes-chip:hover{border-color:var(--accent);color:var(--accent);}
+
+/* ── STYLED CONFIRM MODAL ── */
+.csr-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;}
+.csr-modal-box{background:#161B24;border-radius:16px;padding:28px 26px;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.6);}
+.csr-modal-title{font-size:15px;font-weight:800;margin-bottom:12px;}
+.csr-modal-body{font-size:12px;color:rgba(255,255,255,.7);line-height:1.7;margin-bottom:22px;}
+.csr-modal-btns{display:flex;gap:10px;justify-content:flex-end;}
+.csr-modal-cancel{padding:9px 18px;border:1.5px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);border-radius:8px;cursor:pointer;font-size:12px;font-weight:700;font-family:inherit;}
+.csr-modal-ok{padding:9px 18px;border:none;border-radius:8px;cursor:pointer;font-size:12px;font-weight:800;font-family:inherit;color:#000;}
+
+/* ── FLOATING SHARE BUTTONS ── */
+.fab-group{position:fixed;bottom:120px;right:18px;display:flex;flex-direction:column;gap:16px;z-index:8000;}
+.fab{width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:24px;transition:transform .15s,filter .15s;position:relative;}
+.fab-wa{background:#25D366;box-shadow:0 4px 14px rgba(37,211,102,.6),0 2px 4px rgba(0,0,0,.3);}
+.fab-ss{background:#6366F1;box-shadow:0 4px 14px rgba(99,102,241,.6),0 2px 4px rgba(0,0,0,.3);}
+.fab:hover{transform:translateY(-2px) scale(1.08);filter:brightness(1.12);box-shadow:0 6px 22px rgba(0,0,0,.55);}
+.fab:active{transform:scale(.92);}
+.fab-lbl{position:absolute;right:58px;background:rgba(15,15,15,.88);color:#fff;font-size:10px;font-weight:700;padding:4px 9px;border-radius:6px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .15s;border:1px solid rgba(255,255,255,.1);}
+.fab:hover .fab-lbl{opacity:1;}
+
+.add-row-bar{padding:9px 16px;border-top:1px dashed var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 -18px -10px;}
 .add-row-btn{padding:6px 14px;border:1.5px dashed var(--accent);background:transparent;color:var(--accent);border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;font-family:'Outfit',sans-serif;transition:all .16s;}
 .add-row-btn:hover{background:var(--accent-lt);}
 .add-row-btn:disabled{opacity:.4;cursor:default;}
@@ -295,6 +337,7 @@ tfoot td{background:var(--tfoot)!important;font-family:'DM Mono',monospace;font-
 
 /* STAFF */
 .staff-sec{padding:13px 18px;}
+.section-body{padding:10px 18px;}
 .staff-add{margin-top:9px;padding:6px 14px;border:1.5px dashed var(--accent);background:transparent;color:var(--accent);border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;font-family:'Outfit',sans-serif;transition:all .16s;}
 .staff-add:hover{background:var(--accent-lt);}
 .staff-add:disabled{opacity:.4;cursor:default;}
@@ -334,6 +377,11 @@ tfoot td{background:var(--tfoot)!important;font-family:'DM Mono',monospace;font-
 .month-pick::-webkit-calendar-picker-indicator,.range-pick::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.6);}
 .load-btn{padding:9px 18px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;border:none;border-radius:8px;font-size:12px;font-weight:700;font-family:'Outfit',sans-serif;cursor:pointer;box-shadow:0 2px 9px var(--glow);transition:all .2s;align-self:flex-end;}
 .load-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px var(--glow);}
+
+.mini-btn{padding:7px 10px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;align-self:flex-end;white-space:nowrap;transition:all .2s;border:1.5px solid;}
+.mini-btn:hover{transform:translateY(-1px);filter:brightness(1.2);box-shadow:0 4px 14px rgba(0,0,0,.3);}
+.mini-btn-pdf{background:rgba(239,68,68,.18);border-color:rgba(239,68,68,.4);color:#FCA5A5;}
+.mini-btn-xls{background:rgba(16,185,129,.15);border-color:rgba(16,185,129,.35);color:#6EE7B7;}
 
 /* Stat cards */
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:13px;margin-bottom:18px;}
@@ -447,8 +495,11 @@ canvas{width:100%!important;display:block;}
 @media(max-width:640px){.tb-right .btn span{display:none;}.btn{padding:7px 10px;}.nav-tab span{display:none;}}
 </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" crossorigin="anonymous"></script>
 </head>
 <body data-theme="warm">
+<div class="offline-banner" id="offlineBanner">📡 You are OFFLINE — Data will save to local storage only. Cloud sync will resume when connection returns.</div>
 
 <!-- SAVING OVERLAY -->
 <div id="savingOverlay"><div class="spinner"></div><span id="savingTxt">Saving to Cloud…</span></div>
@@ -479,7 +530,7 @@ canvas{width:100%!important;display:block;}
   <div class="topbar">
     <div class="tb-logo">🕉️</div>
     <div class="tb-title">
-      <h1>CSR Family Garden Restaurant</h1>
+      <h1 id="brandName">CSR Family Garden Restaurant</h1>
       <p id="roleSubtitle">—</p>
     </div>
     <div class="tb-right">
@@ -538,6 +589,7 @@ canvas{width:100%!important;display:block;}
 
           <!-- PURCHASES -->
           <div class="sec-hd"><h3>🛒 Purchases — కొనుగోళ్ళు</h3><span class="sec-meta">Total: ₹<span id="purMeta">0.00</span></span></div>
+          <div class="section-body">
           <div class="tbl-wrap">
             <table>
               <thead><tr>
@@ -565,6 +617,7 @@ canvas{width:100%!important;display:block;}
           <div class="add-row-bar">
             <button class="add-row-btn" id="addPurBtn" onclick="addPurchaseRow()" disabled>＋ Add Item</button>
             <span style="font-size:10px;color:var(--muted)">Unlock to edit. Select item → unit fills automatically.</span>
+          </div>
           </div>
 
           <div class="sheet-div"></div>
@@ -621,6 +674,7 @@ canvas{width:100%!important;display:block;}
             <h3>⚠️ Pending Bills — బకాయి బిల్లులు</h3>
             <span class="sec-meta">Total: ₹<span id="pendMeta">0.00</span></span>
           </div>
+          <div class="section-body">
           <div class="tbl-wrap">
             <table>
               <thead><tr>
@@ -643,13 +697,37 @@ canvas{width:100%!important;display:block;}
           <div class="add-row-bar">
             <button class="add-row-btn" id="addPBBtn" onclick="addPendingBillRow()" disabled>＋ Add Pending Bill</button>
           </div>
+          </div>
 
           <div class="sheet-div"></div>
 
           <!-- NOTES -->
           <div class="sec-hd"><h3>📝 Notes — గమనికలు</h3></div>
+          <div class="notes-chips" id="notesChips">
+            <span class="notes-chip" onclick="appendNote('Full house today 🎉')">Full house</span>
+            <span class="notes-chip" onclick="appendNote('Half staff today')">Half staff</span>
+            <span class="notes-chip" onclick="appendNote('Stock audit done ✓')">Stock audit</span>
+            <span class="notes-chip" onclick="appendNote('Public holiday')">Holiday</span>
+            <span class="notes-chip" onclick="appendNote('Special order received')">Special order</span>
+            <span class="notes-chip" onclick="appendNote('Gas refilled today')">Gas refill</span>
+            <span class="notes-chip" onclick="appendNote('Slow day — low footfall')">Slow day</span>
+            <span class="notes-chip" onclick="appendNote('Rainy weather affected sales')">Rainy day</span>
+          </div>
           <div class="notes-sec">
             <textarea id="notes" rows="3" placeholder="Daily notes, special orders, remarks... రోజు విశేషాలు" readonly></textarea>
+          </div>
+
+          <div class="sheet-div"></div>
+
+          <!-- END-OF-DAY CHECKLIST -->
+          <div class="sec-hd"><h3>✅ End-of-Day Checklist — రోజు ముగింపు</h3></div>
+          <div class="chk-grid" id="chkGrid">
+            <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox" id="chk1" disabled><label for="chk1">💵 Cash counted &amp; verified</label></div>
+            <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox" id="chk2" disabled><label for="chk2">📊 All purchases entered</label></div>
+            <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox" id="chk3" disabled><label for="chk3">👥 Staff salaries updated</label></div>
+            <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox" id="chk4" disabled><label for="chk4">⚠️ Pending bills checked</label></div>
+            <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox" id="chk5" disabled><label for="chk5">💾 Sheet saved to cloud</label></div>
+            <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox" id="chk6" disabled><label for="chk6">📱 Summary sent to owner</label></div>
           </div>
 
         </div><!-- /sheet-card -->
@@ -660,7 +738,10 @@ canvas{width:100%!important;display:block;}
         <div class="owner-card">
           <div class="owner-head">
             <div><h3>👑 Today's Owner Summary</h3><p>Confidential — Owner only / యజమాని మాత్రమే</p></div>
-            <div class="owner-badge">RESTRICTED</div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="owner-badge">RESTRICTED</div>
+              <button onclick="shareWhatsApp()" style="background:#25D366;color:#fff;border:none;border-radius:16px;padding:4px 12px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit">📱 Share</button>
+            </div>
           </div>
           <div class="kpi-grid">
             <div class="kpi ks"><div class="kl">Total Sales</div><div class="kv">₹<span id="op_s">0.00</span></div><div class="ktrend" id="op_s_sub">—</div></div>
@@ -686,6 +767,16 @@ canvas{width:100%!important;display:block;}
         </div>
       </div>
 
+      <!-- Floating Share Buttons -->
+      <div class="fab-group" id="fabGroup">
+        <div style="position:relative">
+          <button class="fab fab-wa" onclick="shareWhatsApp()" title="Share via WhatsApp">📱<span class="fab-lbl">WhatsApp</span></button>
+        </div>
+        <div style="position:relative">
+          <button class="fab fab-ss" onclick="shareScreenshot()" title="Share Screenshot">📸<span class="fab-lbl">Screenshot</span></button>
+        </div>
+      </div>
+
     </div>
   </div><!-- /pageDaily -->
 
@@ -694,11 +785,13 @@ canvas{width:100%!important;display:block;}
     <div class="page">
       <div class="dash-hd">
         <div><h2>📊 Analytics Dashboard</h2><p>Monthly expense tracking &amp; insights — Owner View</p></div>
-        <div class="dash-ctrls">
+       <div class="dash-ctrls">
           <div class="pick-grp"><label>Month</label><input type="month" class="month-pick" id="monthPick"></div>
           <div class="pick-grp"><label>From</label><input type="date" class="range-pick" id="rangeFrom"></div>
           <div class="pick-grp"><label>To</label><input type="date" class="range-pick" id="rangeTo"></div>
           <button class="load-btn" onclick="loadAnalytics()">Load →</button>
+          <button class="mini-btn mini-btn-pdf" onclick="buildMonthPDF()" title="Download Monthly PDF report">📄 PDF</button>
+          <button class="mini-btn mini-btn-xls" onclick="exportXLSX()" title="Export to Excel spreadsheet">📊 XLS</button>
         </div>
       </div>
       <div class="formula-legend" style="border-radius:10px;margin-bottom:14px;border:1px solid var(--border);">
@@ -734,6 +827,7 @@ canvas{width:100%!important;display:block;}
           <div class="pick-grp"><label>From</label><input type="date" class="range-pick" id="histFrom"></div>
           <div class="pick-grp"><label>To</label><input type="date" class="range-pick" id="histTo"></div>
           <button class="load-btn" onclick="loadHistory()">Load →</button>
+          <button class="load-btn" onclick="loadPriceTrend()" style="background:rgba(139,92,246,.2);border-color:rgba(139,92,246,.4);color:#C4B5FD">📈 Price Trend</button>
         </div>
       </div>
       <div class="formula-legend" style="border-radius:10px;margin-bottom:14px;border:1px solid var(--border);">
@@ -864,6 +958,8 @@ function toggleTheme(){
   }
 }
 document.getElementById('themeKnob').textContent = theme==='warm'?'🌞':'🌙';
+const _ls=localStorage.getItem('csrLastSync');
+if(_ls)document.getElementById('cloudTxt').textContent='Synced '+_ls;
 
 // ══════════════════════════════════════════
 // ITEMS
@@ -986,10 +1082,13 @@ document.addEventListener('keydown',e=>{
 */
 
 function logout(){
-  if(confirm('Logout?')){
-    sessionStorage.removeItem('csrAuth');
-    location.reload();
-  }
+  showConfirmModal(
+    '🚪 Logout?',
+    'You will be logged out and returned to the login screen.',
+    'Logout',
+    ()=>{sessionStorage.removeItem('csrAuth');location.reload();},
+    'warn'
+  );
 }
 
 // ── Auto-restore session on page refresh ──
@@ -1137,16 +1236,28 @@ function setEditMode(on){
   document.querySelectorAll('.del-btn').forEach(b=>b.disabled=!on);
   const sb=document.getElementById('saveBtn');
   if(sb){sb.disabled=!on;sb.style.opacity=on?'1':'0.5';}
+  // Enable/disable checklist
+  document.querySelectorAll('#chkGrid input[type=checkbox]').forEach(cb=>cb.disabled=!on);
+  if(on) loadChecklist();
 }
 
 function toggleEditMode(){
   if(editMode){
-    if(confirm('Lock this sheet? You can unlock again anytime.')) setEditMode(false);
+    showConfirmModal(
+      '🔒 Lock Sheet?',
+      'Lock this sheet to prevent accidental edits.<br>You can unlock it again anytime.',
+      'Lock Sheet', ()=>setEditMode(false), 'info'
+    );
   } else {
     if(currentDate!==todayStr()){
-      if(!confirm(`⚠️ You are about to edit ${currentDate} (past date).\n\nAre you sure you want to modify this record?`)) return;
+      showConfirmModal(
+        '⚠️ Editing Past Record',
+        `You are about to edit <strong>${currentDate}</strong>.<br><br>This is a past date. Changes will overwrite the saved record.`,
+        'Edit Anyway', ()=>setEditMode(true), 'warn'
+      );
+    } else {
+      setEditMode(true);
     }
-    setEditMode(true);
   }
 }
 
@@ -1227,10 +1338,12 @@ function calcRow(inp){
 function calcTotals(){
   let tU=0,tC=0,tA=0;
   document.querySelectorAll('#pTbody tr').forEach(tr=>{
+    const rowV=tr.querySelector('.row-v');
+    if(!rowV)return; // skip placeholder/no-data rows
     const qty=parseFloat(tr.querySelector('.qty-c')?.value)||0,rt=parseFloat(tr.querySelector('.rate-c')?.value)||0;
     const upi=parseFloat(tr.querySelector('.upi-c')?.value)||0,cc=parseFloat(tr.querySelector('.cc-c')?.value)||0;
     const rowTot=(upi+cc)||(qty*rt);
-    tr.querySelector('.row-v').textContent=rowTot.toFixed(2);
+    rowV.textContent=rowTot.toFixed(2);
     tU+=upi;tC+=cc;tA+=rowTot;
   });
   set('ctUPI',tU);set('ctCC',tC);set('ctAll',tA);set('purMeta',tA);set('qb_pur',tA);
@@ -1299,13 +1412,15 @@ function calcStaffRow(inp){
 function calcStaffTotals(){
   let tSub=0,tU=0,tC=0,tA=0;
   document.querySelectorAll('#sTbody tr').forEach(tr=>{
+    const rowV=tr.querySelector('.srow-v');
+    if(!rowV)return; // skip placeholder/no-data rows
     const qty=parseFloat(tr.querySelector('.sq-c')?.value)||0;
     const pp=parseFloat(tr.querySelector('.sp-c')?.value)||0;
     const sub=qty*pp;
     const upi=parseFloat(tr.querySelector('.supi-c')?.value)||0;
     const cc=parseFloat(tr.querySelector('.scc-c')?.value)||0;
     const rowTot=(upi+cc)||sub;
-    tr.querySelector('.srow-v').textContent=rowTot.toFixed(2);
+    rowV.textContent=rowTot.toFixed(2);
     tSub+=sub;tU+=upi;tC+=cc;tA+=rowTot;
   });
   set('stSub',tSub);set('stUPI',tU);set('stCC',tC);set('stAll',tA);
@@ -1361,7 +1476,7 @@ function updateOwner(){
   set('op_s',sales);set('op_p',pur);set('op_w',sal);set('op_usage',usage);
   set('op_fb',free);set('op_net',Math.abs(net));set('op_pend',pendAmt);
   set('qb_usage',usage);
-  const pbRows=document.querySelectorAll('#pbTbody tr').length;
+  const pbRows=getPBSnap().length;
   document.getElementById('op_pend_cnt').textContent=pbRows+' pending bill'+(pbRows!==1?'s':'');
   const cash2=parseFloat(document.getElementById('cashColl').value)||0;
   const upi2=parseFloat(document.getElementById('upiColl').value)||0;
@@ -1380,12 +1495,14 @@ function getSnap(){
   const rows=[];
   document.querySelectorAll('#pTbody tr').forEach(tr=>{
     const s=tr.querySelector('select'),o=s?s.options[s.selectedIndex]:null;
-    rows.push({
-      en:s?s.value:'',te:o?(o.getAttribute('data-te')||s.value):'',
-      qty:tr.querySelector('.qty-c')?.value||'',unit:tr.querySelector('.unit-c')?.value||'',
-      rate:tr.querySelector('.rate-c')?.value||'',
-      upi:tr.querySelector('.upi-c')?.value||'',cc:tr.querySelector('.cc-c')?.value||''
-    });
+    const en=s?s.value:'';
+    const qty=tr.querySelector('.qty-c')?.value||'';
+    const rate=tr.querySelector('.rate-c')?.value||'';
+    const upi=tr.querySelector('.upi-c')?.value||'';
+    const cc=tr.querySelector('.cc-c')?.value||'';
+    if(!en&&!qty&&!rate&&!upi&&!cc)return;
+    rows.push({en,te:o?(o.getAttribute('data-te')||en):'',
+      qty,unit:tr.querySelector('.unit-c')?.value||'',rate,upi,cc});
   });
   return rows;
 }
@@ -1395,6 +1512,7 @@ function getStaffSnap(){
   const rows=[];
   document.querySelectorAll('#sTbody tr').forEach((tr,i)=>{
     const nameEl=tr.querySelector('input:first-of-type');
+    if(!nameEl)return; // skip placeholder/no-data rows
     const roleEl=tr.querySelector('select');
     rows.push({
       name:nameEl?nameEl.value:'',
@@ -1413,7 +1531,22 @@ function getStaffSnap(){
 // ══════════════════════════════════════════
 async function saveData(){
   if(!editMode){toast('🔒 Sheet is locked — unlock first','warn');return;}
-  
+
+  // Duplicate date warning for past dates
+  if(currentDate!==todayStr()){
+    const existing=localStorage.getItem('csrV6_'+BRANCH_ID+'_'+currentDate);
+    if(existing){
+      const proceed=await new Promise(resolve=>{
+        showConfirmModal(
+          '⚠️ Overwrite Existing Record?',
+          `<strong>${currentDate}</strong> already has saved data.<br><br>Saving now will <strong>overwrite</strong> it permanently.`,
+          'Overwrite', ()=>resolve(true), 'danger', ()=>resolve(false)
+        );
+      });
+      if(!proceed) return;
+    }
+  }
+
   // Auto-remove empty purchase rows on manual save
   cleanEmptyRows();
   
@@ -1427,14 +1560,14 @@ async function saveData(){
   };
 
   if(!GOOGLE_SCRIPT_URL){
-    localStorage.setItem('csrV6_'+currentDate, JSON.stringify(data));
+    localStorage.setItem('csrV6_'+BRANCH_ID+'_'+currentDate, JSON.stringify(data));
     showCloudModal('Saved Locally Only',
       'Google Sheets is not configured.\nData saved in this browser only.\n\nSet your Apps Script URL at the top of the HTML file to enable cloud sync across devices.');
     return;
   }
 
   // Always save to localStorage first as backup
-  try{localStorage.setItem('csrV6_'+currentDate,JSON.stringify(data));}catch(e){}
+  try{localStorage.setItem('csrV6_'+BRANCH_ID+'_'+currentDate,JSON.stringify(data));}catch(e){}
 
   // Cloud save with proper error handling
   showSaving(true,'Saving to Google Sheets…');
@@ -1456,7 +1589,9 @@ async function saveData(){
 
     if(result.status==='ok'){
       document.getElementById('cloudDot').className='cloud-dot ok';
-      document.getElementById('cloudTxt').textContent='Saved ✓';
+      const st=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+      document.getElementById('cloudTxt').textContent='Saved ✓ '+st;
+      localStorage.setItem('csrLastSync',st);
       toast('☁️ Saved to Google Sheets! ('+currentDate+')','success');
     } else {
       throw new Error(result.message||'Unknown error');
@@ -1541,7 +1676,7 @@ async function loadData(date){
   // ── Step 3: handle result ──
   if(result.status==='ok' && result.data){
     applyData(result.data);
-    try{localStorage.setItem('csrV6_'+date,JSON.stringify(result.data));}catch(e){}
+    try{localStorage.setItem('csrV6_'+BRANCH_ID+'_'+date,JSON.stringify(result.data));}catch(e){}
     document.getElementById('cloudDot').className='cloud-dot ok';
     document.getElementById('cloudTxt').textContent='Cloud ✓';
     toast('☁️ Loaded: '+date,'success');
@@ -1551,7 +1686,7 @@ async function loadData(date){
     document.getElementById('cloudTxt').textContent='Cloud ✓';
     console.log('[CSR LOAD] Server says not_found for',date);
     // Try localStorage cache before giving blank sheet
-    const cached=localStorage.getItem('csrV6_'+date);
+    const cached=localStorage.getItem('csrV6_'+BRANCH_ID+'_'+date);
     if(cached){
       try{applyData(JSON.parse(cached));toast('📂 From local cache: '+date,'warn');return;}catch(e){}
     }
@@ -1621,7 +1756,7 @@ async function debugLoad(){
 
 
 function localLoad(date){
-  const raw=localStorage.getItem('csrV6_'+date);
+  const raw=localStorage.getItem('csrV6_'+BRANCH_ID+'_'+date);
   if(raw){
     try{applyData(JSON.parse(raw));toast('📂 Local cache loaded: '+date);}
     catch(e){applyDefaults();toast('❌ Cache corrupt — fresh sheet','error');}
@@ -1652,8 +1787,12 @@ function showCloudModal(title,msg){
 
 function applyData(d){
   document.getElementById('pTbody').innerHTML='';
-  (d.purchases||[]).forEach(r=>addPurchaseRow(r));
-  if(!(d.purchases||[]).length) addDefaultRows();
+  const cleanPur=(d.purchases||[]).filter(r=>r.en||r.qty||r.rate||r.upi||r.cc);
+  if(cleanPur.length){
+    cleanPur.forEach(r=>addPurchaseRow(r));
+  } else {
+    document.getElementById('pTbody').innerHTML='<tr><td colspan="10" style="text-align:center;padding:18px;color:var(--muted);font-size:11px;font-style:italic">— No purchases recorded for this day —</td></tr>';
+  }
   const s=d.sales||{};
   ['cashColl','upiColl','freeBill'].forEach(id=>{
     const el=document.getElementById(id);
@@ -1663,9 +1802,20 @@ function applyData(d){
   });
   document.getElementById('notes').value=d.notes||'';
   document.getElementById('notes').readOnly=!editMode;
-  renderStaff(d.staff||defaultStaff());
-  const pb=d.pendingBills;
-  renderPBRows((pb&&pb.length)?pb:[{name:'',role:'Customer',customer:'',phone:'',billNo:'',amount:''}]);
+  const cleanStaff=(d.staff||[]).filter(s=>s.upi||s.cc||(parseFloat(s.qty)&&parseFloat(s.salary)));
+  if(cleanStaff.length){
+    renderStaff(cleanStaff);
+  } else {
+    document.getElementById('sTbody').innerHTML='<tr><td colspan="9" style="text-align:center;padding:18px;color:var(--muted);font-size:11px;font-style:italic">— No salaries paid for this day —</td></tr>';
+    calcStaffTotals();
+  }
+  const pb=(d.pendingBills||[]).filter(r=>r.name||r.amount);
+  if(pb.length){
+    renderPBRows(pb);
+  } else {
+    document.getElementById('pbTbody').innerHTML='<tr><td colspan="7" style="text-align:center;padding:18px;color:var(--muted);font-size:11px;font-style:italic">— No pending bills for this day —</td></tr>';
+    updatePBTotals();
+  }
   calcSales();calcTotals();
 }
 
@@ -1700,7 +1850,7 @@ setInterval(()=>{
   if(document.getElementById('app').classList.contains('visible')&&editMode){
     try{
       const data={purchases:getSnap(),sales:{cashColl:document.getElementById('cashColl').value,upiColl:document.getElementById('upiColl').value,freeBill:document.getElementById('freeBill').value},staff:getStaffSnap(),pendingBills:getPBSnap(),notes:document.getElementById('notes').value,savedAt:new Date().toISOString()};
-      localStorage.setItem('csrV6_'+currentDate,JSON.stringify(data));
+      localStorage.setItem('csrV6_'+BRANCH_ID+'_'+currentDate,JSON.stringify(data));
     }catch(e){}
   }
 },120000);
@@ -1887,12 +2037,70 @@ function renderAnalytics(days,from,to){
       <div class="cc"><h4>Expense Breakdown</h4><p class="cs">Purchases vs Salaries vs Free Bill (Comp)</p><canvas id="cCat" height="190"></canvas></div>
     </div>
 
-    <div class="itbl">
-      <table>
-        <thead><tr><th style="width:40px">Rank</th><th>Item</th><th style="text-align:right;width:130px">Total Spent</th><th style="text-align:right;width:110px">Avg/Day</th><th style="width:180px">% of Purchases</th></tr></thead>
-        <tbody>${topItems.map(([nm,tot],i)=>`<tr><td><span class="rank ${i<3?'r'+(i+1):'rn'}">${i+1}</span></td><td><strong>${nm}</strong></td><td style="text-align:right;font-family:'DM Mono',monospace;font-weight:700;color:var(--accent)">${f(tot)}</td><td style="text-align:right;font-family:'DM Mono',monospace;color:var(--muted)">${f(tot/days.length)}</td><td><span style="font-size:11px;color:var(--muted)">${((tot/totPur)*100).toFixed(1)}%</span><div class="sbar-wrap"><div class="sbar" style="width:${((tot/maxItem)*100).toFixed(0)}%"></div></div></td></tr>`).join('')}</tbody>
-      </table>
-    </div>
+    ${(()=>{
+      const itemMap={};
+      Object.entries(window._lastAnalyticsRaw||{}).forEach(([date,d])=>{
+        (d.purchases||[]).forEach(r=>{
+          if(!r.en)return;
+          if(!itemMap[r.en])itemMap[r.en]={name:r.en,unit:r.unit||'',days:0,totalQty:0,totalAmt:0,rates:[],upi:0,cc:0};
+          const u=parseFloat(r.upi)||0,c=parseFloat(r.cc)||0;
+          const qty=parseFloat(r.qty)||0,rate=parseFloat(r.rate)||0;
+          const amt=(u+c)||(qty*rate);
+          itemMap[r.en].days++;itemMap[r.en].totalQty+=qty;itemMap[r.en].totalAmt+=amt;
+          itemMap[r.en].upi+=u;itemMap[r.en].cc+=c;
+          if(rate>0)itemMap[r.en].rates.push(rate);
+        });
+      });
+      const items=Object.values(itemMap).filter(it=>it.totalAmt>0).sort((a,b)=>b.totalAmt-a.totalAmt);
+      if(!items.length)return '<div class="dlog"><div class="dlog-hd"><h4>🛒 Top Purchase Items</h4><p>No purchase data found</p></div></div>';
+      const grandTotal=items.reduce((a,it)=>a+it.totalAmt,0);
+      return `
+        <div class="dlog" style="margin-bottom:18px">
+          <div class="dlog-hd" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+            <div>
+              <h4>🛒 Top Purchase Items</h4>
+              <p>${items.length} items · Total Spend: <strong style="color:var(--accent)">${f(grandTotal)}</strong> · ${days.length} days</p>
+            </div>
+          </div>
+          <div class="tab-wrap"><table>
+            <thead><tr>
+              <th class="th-b" style="text-align:left;min-width:120px">Item</th>
+              <th class="th-b" style="width:50px">Days</th>
+              <th class="th-b" style="min-width:70px">Total Qty</th>
+              <th class="th-u" style="min-width:80px">UPI ₹</th>
+              <th class="th-c" style="min-width:80px">Cash ₹</th>
+              <th class="th-t" style="min-width:90px">Total Spent ₹</th>
+              <th class="th-b" style="min-width:80px">Avg Rate ₹</th>
+              <th class="th-b" style="min-width:70px">% of Spend</th>
+            </tr></thead>
+            <tbody>
+            ${items.map((it,i)=>{
+              const avgRate=it.rates.length?(it.rates.reduce((a,v)=>a+v,0)/it.rates.length):0;
+              const pct=((it.totalAmt/grandTotal)*100).toFixed(1);
+              const barW=Math.round((it.totalAmt/items[0].totalAmt)*100);
+              return `<tr style="${i%2?'background:var(--row-alt)':''}">
+                <td style="text-align:left;padding-left:8px;font-weight:700;font-size:12px">
+                  <div>${it.name}</div>
+                  <div style="height:3px;width:${barW}%;background:var(--accent);border-radius:2px;opacity:.4;margin-top:3px"></div>
+                </td>
+                <td style="text-align:center;font-family:'DM Mono',monospace;font-weight:700;color:var(--accent)">${it.days}</td>
+                <td style="text-align:center;font-family:'DM Mono',monospace">${it.totalQty>0?it.totalQty.toFixed(1)+' '+it.unit:'—'}</td>
+                <td style="text-align:right;font-family:'DM Mono',monospace;color:#7DD3FC">${it.upi?f(it.upi):'—'}</td>
+                <td style="text-align:right;font-family:'DM Mono',monospace;color:#FDE68A">${it.cc?f(it.cc):'—'}</td>
+                <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:800;color:var(--accent)">${f(it.totalAmt)}</td>
+                <td style="text-align:right;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">${avgRate>0?'₹'+avgRate.toFixed(2):'—'}</td>
+                <td style="text-align:center;font-size:11px;font-weight:700;color:var(--gold)">${pct}%</td>
+              </tr>`;
+            }).join('')}
+            </tbody>
+            <tfoot><tr style="background:var(--tfoot)">
+              <td colspan="5" style="color:var(--gold);font-weight:800;font-size:11px;padding:8px 12px">TOTAL (${items.length} items)</td>
+              <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:800;color:var(--accent);padding:8px">${f(grandTotal)}</td>
+              <td colspan="2"></td>
+            </tr></tfoot>
+          </table></div>
+        </div>`;
+    })()}
 
     <div class="dlog">
       <div class="dlog-hd" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px">
@@ -1900,6 +2108,16 @@ function renderAnalytics(days,from,to){
           <h4>Day-by-Day Log</h4>
           <p>📐 Sales=Cash+UPI · Purchases=purchase table · Salaries=staff total · Net=Sales−Purchases−Salaries−Free · UPI/CC = combined across all rows</p>
         </div>
+        ${(()=>{
+          const profDays=days.filter(d=>d.net>0);
+          const lossDays=days.filter(d=>d.net<=0);
+          const profTotal=profDays.reduce((a,d)=>a+d.net,0);
+          const lossTotal=lossDays.reduce((a,d)=>a+d.net,0);
+          return `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:1px">
+            <span style="background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.3);border-radius:8px;padding:4px 10px;font-size:11px;color:#4ADE80;font-weight:700">✅ ${profDays.length} profit days · +${f(profTotal)}</span>
+            ${lossDays.length?`<span style="background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.3);border-radius:8px;padding:4px 10px;font-size:11px;color:#F87171;font-weight:700">⚠️ ${lossDays.length} loss days · ${f(lossTotal)}</span>`:''}
+          </div>`;
+        })()}
         <button onclick="exportDayLogCSV()" style="background:var(--accent);color:#000;border:none;border-radius:8px;padding:6px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap">⬇ Export CSV</button>
       </div>
       <div class="tab-wrap"><table>
@@ -2080,6 +2298,62 @@ function renderAnalytics(days,from,to){
               </table>
             </div>
           </div>
+        </div>`;
+    })()}
+
+    ${(()=>{
+      const staffSummary={};
+      Object.entries(window._lastAnalyticsRaw||{}).forEach(([date,d])=>{
+        (d.staff||[]).forEach(s=>{
+          const nm=s.name?.trim();if(!nm)return;
+          const qty=parseFloat(s.qty)||1,pp=parseFloat(s.salary)||0;
+          const u=parseFloat(s.upi)||0,c=parseFloat(s.cc)||0;
+          const paid=(u+c)||(qty*pp);
+          if(!paid)return;
+          const role=(s.role||'Other').split('/')[0].trim();
+          if(!staffSummary[nm])staffSummary[nm]={name:nm,role,days:0,total:0,upi:0,cc:0};
+          staffSummary[nm].days++;staffSummary[nm].total+=paid;
+          staffSummary[nm].upi+=u;staffSummary[nm].cc+=c;
+        });
+      });
+      const rows=Object.values(staffSummary).sort((a,b)=>b.total-a.total);
+      if(!rows.length)return '';
+      const grandTotal=rows.reduce((a,r)=>a+r.total,0);
+      return `
+        <div class="dlog" style="margin-bottom:18px">
+          <div class="dlog-hd" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+            <div>
+              <h4>💼 Staff Earnings Summary</h4>
+              <p>${rows.length} staff members · Grand Total: <strong style="color:var(--accent)">${f(grandTotal)}</strong> · ${days.length} days period</p>
+            </div>
+          </div>
+          <div class="tab-wrap"><table>
+            <thead><tr>
+              <th class="th-b" style="text-align:left;min-width:110px">Name</th>
+              <th class="th-b" style="text-align:left;min-width:110px">Role</th>
+              <th class="th-b" style="width:50px">Days</th>
+              <th class="th-u" style="min-width:80px">📱 UPI ₹</th>
+              <th class="th-c" style="min-width:80px">💵 Cash ₹</th>
+              <th class="th-t" style="min-width:90px">Total Paid ₹</th>
+              <th class="th-b" style="min-width:80px">Avg/Day ₹</th>
+            </tr></thead>
+            <tbody>
+            ${rows.map((r,i)=>`<tr style="${i%2?'background:var(--row-alt)':''}">
+              <td style="text-align:left;padding-left:8px;font-weight:700;font-size:12px">${r.name}</td>
+              <td style="text-align:left;padding-left:8px;font-size:11px;color:var(--muted)">${r.role}</td>
+              <td style="text-align:center;font-family:'DM Mono',monospace;font-weight:700;color:var(--accent)">${r.days}</td>
+              <td style="text-align:right;font-family:'DM Mono',monospace;color:#7DD3FC">${r.upi?f(r.upi):'—'}</td>
+              <td style="text-align:right;font-family:'DM Mono',monospace;color:#FDE68A">${r.cc?f(r.cc):'—'}</td>
+              <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:800;color:var(--accent)">${f(r.total)}</td>
+              <td style="text-align:right;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">${f(Math.round(r.total/days.length))}</td>
+            </tr>`).join('')}
+            </tbody>
+            <tfoot><tr style="background:var(--tfoot)">
+              <td colspan="5" style="color:var(--gold);font-weight:800;font-size:11px;padding:8px 12px">TOTAL (${rows.length} staff)</td>
+              <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:800;color:var(--accent);padding:8px">${f(grandTotal)}</td>
+              <td style="text-align:right;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);padding:8px">${f(Math.round(grandTotal/days.length))}</td>
+            </tr></tfoot>
+          </table></div>
         </div>`;
     })()}
   `;
@@ -2648,6 +2922,27 @@ function buildPDF(){
     y+=4;
   }
 
+  // ── NOTES ──
+  const notesVal=document.getElementById('notes').value.trim();
+  if(notesVal){
+    addPageIfNeeded(20);
+    doc.setFillColor(20,30,20);doc.rect(M,y,PW-M*2,8,'F');
+    doc.setFillColor(60,180,60);doc.rect(M,y+7.6,PW-M*2,0.4,'F');
+    doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(180,255,180);
+    doc.text('NOTES / REMARKS',M+3,y+5.5);
+    y+=10;
+    doc.setFillColor(28,38,28);doc.rect(M,y,PW-M*2,4,'F');
+    const lines=doc.splitTextToSize(notesVal,PW-M*2-6);
+    lines.forEach(line=>{
+      addPageIfNeeded(6);
+      doc.setFillColor(28,38,28);doc.rect(M,y,PW-M*2,5.5,'F');
+      doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(200,230,200);
+      doc.text(line,M+3,y+4);
+      y+=5.5;
+    });
+    y+=8;
+  }
+
   // ── FOOTER on every page ──
   const np=doc.getNumberOfPages();
   for(let i=1;i<=np;i++){
@@ -2716,7 +3011,10 @@ function getPBSnap(){
   document.querySelectorAll('#pbTbody tr').forEach(tr=>{
     const inputs=tr.querySelectorAll('input');
     const sel=tr.querySelector('select');
-    rows.push({name:inputs[0]?.value||'',role:sel?.value||'',customer:inputs[1]?.value||'',phone:inputs[2]?.value||'',billNo:inputs[3]?.value||'',amount:inputs[4]?.value||''});
+    const name=inputs[0]?.value?.trim()||'';
+    const amount=inputs[4]?.value||'';
+    if(!name&&!amount)return;
+    rows.push({name,role:sel?.value||'',customer:inputs[1]?.value||'',phone:inputs[2]?.value||'',billNo:inputs[3]?.value||'',amount});
   });
   return rows;
 }
@@ -2724,8 +3022,8 @@ function getPBSnap(){
 function calcPBTotal(){
   let tot=0;
   document.querySelectorAll('#pbTbody tr').forEach(tr=>{
-    // inputs: [0]=name [1]=customer [2]=phone [3]=billNo [4]=amount
     const inp=tr.querySelectorAll('input')[4];
+    if(!inp)return; // skip placeholder rows
     tot+=parseFloat(inp?.value)||0;
   });
   return tot;
@@ -2776,7 +3074,7 @@ async function batchLoadDates(from,to){
           const map={};
           r.records.forEach(rec=>{ if(allowed.has(rec.date)) map[rec.date]=rec.data; });
           allowed.forEach(date=>{
-            if(!map[date]){const raw=localStorage.getItem('csrV6_'+date);if(raw)try{map[date]=JSON.parse(raw);}catch(e){}}
+            if(!map[date]){const raw=localStorage.getItem('csrV6_'+BRANCH_ID+'_'+date);if(raw)try{map[date]=JSON.parse(raw);}catch(e){}}
           });
           return map;
         }
@@ -2785,7 +3083,7 @@ async function batchLoadDates(from,to){
   }
   const map={};
   allowed.forEach(date=>{
-    const raw=localStorage.getItem('csrV6_'+date);
+    const raw=localStorage.getItem('csrV6_'+BRANCH_ID+'_'+date);
     if(raw)try{map[date]=JSON.parse(raw);}catch(e){}
   });
   return map;
@@ -3117,6 +3415,11 @@ function finBal(v){
 function renderDailyFinance(dayData,cont){
   const sum=k=>dayData.reduce((a,d)=>a+d[k],0);
   cont.innerHTML=`
+    <div class="cc" style="margin-bottom:18px">
+      <h4>Balance Trend</h4>
+      <p class="cs">Daily closing balance (UPI + Cash combined)</p>
+      <canvas id="cBalTrend" height="160"></canvas>
+    </div>
     <div class="stat-grid" style="margin-bottom:18px">
       <div class="sc rev"><div class="sc-icon">💰</div><div class="sc-lbl">Total Collection</div><div class="sc-val">${finFmt(sum('totalColl'))}</div><div class="sc-sub">Cash + UPI</div></div>
       <div class="sc exp"><div class="sc-icon">💸</div><div class="sc-lbl">Total Used</div><div class="sc-val">${finFmt(sum('totalUsed'))}</div><div class="sc-sub">Purchases + Salaries</div></div>
@@ -3177,6 +3480,7 @@ function renderDailyFinance(dayData,cont){
         </tr></tfoot>
       </table></div>
     </div>`;
+  requestAnimationFrame(()=>drawBalanceTrend(dayData));
 }
 
 function renderMonthlyFinance(dayData,cont){
@@ -3329,6 +3633,498 @@ function exportFinanceCSV(){
   a.click();
   toast('📥 Finance CSV downloaded!','success');
 }
+
+function shareWhatsApp(){
+  const date=document.getElementById('sheetDate')?.textContent||currentDate;
+  const day=document.getElementById('dayBadge')?.textContent||'';
+  const sales=document.getElementById('totalSales')?.textContent||'0';
+  const pur=document.getElementById('ctAll')?.textContent||'0';
+  const sal=document.getElementById('totSalary')?.textContent||'0';
+  const net=document.getElementById('op_net')?.textContent||'0';
+  const netLbl=document.getElementById('op_net_lbl')?.textContent||'Net';
+  const cash=document.getElementById('cashColl')?.value||'0';
+  const upi=document.getElementById('upiColl')?.value||'0';
+  const fb=parseFloat(document.getElementById('freeBill')?.value||0);
+  const usage=(parseFloat(pur)+parseFloat(sal)).toFixed(2);
+  const pend=document.getElementById('op_pend')?.textContent||'0';
+  const notes=document.getElementById('notes')?.value?.trim();
+  const isProfit=netLbl.toLowerCase().includes('profit');
+  const msg=
+`🏡 *CSR Family Garden Restaurant*
+🗓️ ${date}${day?' ('+day+')':''}
+${'─'.repeat(30)}
+💰 *SALES:*
+   💵 Cash : ₹${parseFloat(cash).toFixed(2)}
+   📱 UPI  : ₹${parseFloat(upi).toFixed(2)}
+   📊 Total: ₹${sales}
+  ${fb>0?` 🎁 Free Bill: ₹${fb.toFixed(2)}\n`:''}${'─'.repeat(30)}
+💸 *EXPENSES*
+   🛒 Purchases  : ₹${pur}
+   👥 Salaries   : ₹${sal}
+   💸 Total Usage: ₹${usage}
+  ${parseFloat(pend)>0?` ⚠️ *Pending Bills:* ₹${pend}\n`:''}${'─'.repeat(30)}
+${isProfit?'📈':'📉'} *${netLbl.toUpperCase()}: ₹${net}*
+${'─'.repeat(30)}${notes?'\n📝 *Notes:* '+notes:''}
+
+_Sent from Restaurant Management System_
+ _© 2026 All Rights Reserved · CH. B.A.S.K_`;
+  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+}
+
+function drawBalanceTrend(dayData){
+  const cv=document.getElementById('cBalTrend');if(!cv)return;
+  const ctx=cv.getContext('2d');
+  cv.width=cv.offsetWidth||cv.parentElement.clientWidth||400;
+  const W=cv.width,H=cv.height;
+  const isDark=document.body.getAttribute('data-theme')==='dark';
+  const t={bg:'transparent',grid:isDark?'rgba(255,255,255,.07)':'rgba(0,0,0,.07)',lbl:isDark?'#9CA3AF':'#6B7280',pos:'#22C55E',neg:'#EF4444',zero:isDark?'rgba(255,255,255,.2)':'rgba(0,0,0,.2)'};
+  ctx.clearRect(0,0,W,H);
+  const vals=dayData.map(d=>d.totalBal);
+  const dates=dayData.map(d=>d.date.slice(5));
+  const maxV=Math.max(...vals.map(Math.abs),1)*1.2;
+  const pad={l:54,r:14,t:12,b:32};
+  const cw=W-pad.l-pad.r,ch=H-pad.t-pad.b,n=vals.length;
+  // Grid
+  for(let i=0;i<=4;i++){
+    const gy=pad.t+ch-(i/4)*(ch/2)-(ch/2);
+    ctx.strokeStyle=t.grid;ctx.lineWidth=0.7;
+    ctx.beginPath();ctx.moveTo(pad.l,pad.t+i*(ch/4));ctx.lineTo(W-pad.r,pad.t+i*(ch/4));ctx.stroke();
+  }
+  // Zero line
+  const zy=pad.t+ch/2;
+  ctx.strokeStyle=t.zero;ctx.lineWidth=1.2;
+  ctx.beginPath();ctx.moveTo(pad.l,zy);ctx.lineTo(W-pad.r,zy);ctx.stroke();
+  // Y labels
+  ctx.fillStyle=t.lbl;ctx.font='9px DM Mono';ctx.textAlign='right';
+  [maxV,maxV/2,0,-maxV/2,-maxV].forEach((v,i)=>{
+    const ly=pad.t+(i/4)*ch;
+    ctx.fillText((v/1000).toFixed(1)+'k',pad.l-3,ly+3);
+  });
+  // Line
+  const xOf=i=>pad.l+(i+0.5)*(cw/n);
+  const yOf=v=>pad.t+ch/2-(v/maxV)*(ch/2);
+  ctx.beginPath();ctx.lineWidth=2;
+  vals.forEach((v,i)=>{
+    const x=xOf(i),y=yOf(v);
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  });
+  // Gradient stroke — green if last > 0, red otherwise
+  const grad=ctx.createLinearGradient(0,0,W,0);
+  grad.addColorStop(0,'rgba(34,197,94,.6)');
+  grad.addColorStop(1,vals[vals.length-1]>=0?'#22C55E':'#EF4444');
+  ctx.strokeStyle=grad;ctx.stroke();
+  // Dots
+  vals.forEach((v,i)=>{
+    ctx.beginPath();ctx.arc(xOf(i),yOf(v),3,0,Math.PI*2);
+    ctx.fillStyle=v>=0?'#22C55E':'#EF4444';ctx.fill();
+    ctx.strokeStyle='#fff';ctx.lineWidth=1;ctx.stroke();
+  });
+  // X labels
+  const step=Math.max(1,Math.floor(n/7));
+  ctx.fillStyle=t.lbl;ctx.font='8px DM Mono';ctx.textAlign='center';
+  dates.forEach((d,i)=>{if(i%step===0)ctx.fillText(d,xOf(i),H-pad.b+12);});
+}
+
+async function loadPriceTrend(){
+  const from=document.getElementById('histFrom').value;
+  const to=document.getElementById('histTo').value;
+  const selectedItem=document.getElementById('histItemPick').value;
+  if(!from||!to){toast('Select date range','warn');return;}
+  const cont=document.getElementById('historyContent');
+  cont.innerHTML='<div class="no-data"><div class="nd-ico">⏳</div><h3>Loading price data…</h3></div>';
+  const dataMap=await batchLoadDates(from,to);
+  // Collect all (date, item, rate, qty) entries
+  const priceMap={};
+  Object.entries(dataMap).sort((a,b)=>a[0].localeCompare(b[0])).forEach(([date,d])=>{
+    (d.purchases||[]).forEach(r=>{
+      if(!r.en||!r.rate)return;
+      if(selectedItem!=='__all__'&&r.en!==selectedItem)return;
+      if(!priceMap[r.en])priceMap[r.en]=[];
+      priceMap[r.en].push({date,rate:parseFloat(r.rate)||0,qty:parseFloat(r.qty)||0,unit:r.unit||''});
+    });
+  });
+  const items=Object.entries(priceMap).sort((a,b)=>a[0].localeCompare(b[0]));
+  if(!items.length){
+    cont.innerHTML='<div class="no-data"><div class="nd-ico">📭</div><h3>No price data found</h3><p>Make sure rate column is filled in purchases</p></div>';
+    return;
+  }
+  cont.innerHTML=items.map(([name,entries])=>{
+    const rates=entries.map(e=>e.rate);
+    const minR=Math.min(...rates),maxR=Math.max(...rates);
+    const firstR=rates[0],lastR=rates[rates.length-1];
+    const change=((lastR-firstR)/firstR*100);
+    const changeCol=change>5?'#F87171':change<-5?'#4ADE80':'#FCD34D';
+    const changeStr=change>=0?'+'+change.toFixed(1)+'%':change.toFixed(1)+'%';
+    return `<div class="dlog" style="margin-bottom:14px">
+      <div class="dlog-hd" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+        <div><h4>📦 ${name}</h4>
+          <p>Min: ₹${minR.toFixed(2)} · Max: ₹${maxR.toFixed(2)} · Latest: ₹${lastR.toFixed(2)} · <span style="color:${changeCol};font-weight:700">${changeStr} over period</span></p>
+        </div>
+      </div>
+      <div class="tab-wrap"><table>
+        <thead><tr>
+          <th class="th-b" style="text-align:left">Date</th>
+          <th class="th-b">Day</th>
+          <th class="th-b">Qty</th>
+          <th class="th-b">Unit</th>
+          <th class="th-t">Rate ₹</th>
+          <th class="th-b">vs Previous</th>
+        </tr></thead>
+        <tbody>${entries.map((e,i)=>{
+          const prev=i>0?entries[i-1].rate:null;
+          const diff=prev!==null?e.rate-prev:null;
+          const diffStr=diff===null?'—':diff===0?'same':diff>0?`<span style="color:#F87171;font-weight:700">▲ +₹${diff.toFixed(2)}</span>`:`<span style="color:#4ADE80;font-weight:700">▼ −₹${Math.abs(diff).toFixed(2)}</span>`;
+          return `<tr style="${i%2?'background:var(--row-alt)':''}">
+            <td style="font-family:'DM Mono',monospace;font-size:11px;font-weight:700;padding-left:8px;color:var(--accent)">${e.date}</td>
+            <td style="font-size:10px;color:var(--muted);text-align:center">${new Date(e.date+'T00:00:00').toLocaleDateString('en-IN',{weekday:'short'})}</td>
+            <td style="text-align:center;font-family:'DM Mono',monospace">${e.qty||'—'}</td>
+            <td style="text-align:center;font-size:11px;color:var(--muted)">${e.unit||'—'}</td>
+            <td style="text-align:right;font-family:'DM Mono',monospace;font-weight:800;color:var(--gold)">₹${e.rate.toFixed(2)}</td>
+            <td style="text-align:center">${diffStr}</td>
+          </tr>`;
+        }).join('')}</tbody>
+      </table></div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+// STYLED CONFIRM MODAL
+// ══════════════════════════════════════════
+function showConfirmModal(title,bodyHtml,confirmLabel,onConfirm,type,onCancel){
+  const existing=document.getElementById('csrConfirmModal');
+  if(existing)existing.remove();
+  const colors={
+    warn:{border:'#F59E0B',btn:'#F59E0B',title:'#FDE68A'},
+    danger:{border:'#EF4444',btn:'#EF4444',title:'#FCA5A5'},
+    info:{border:'#3B82F6',btn:'#3B82F6',title:'#BAE6FD'}
+  };
+  const c=colors[type]||colors.warn;
+  const m=document.createElement('div');
+  m.id='csrConfirmModal';
+  m.className='csr-modal-overlay';
+  m.innerHTML=`
+    <div class="csr-modal-box" style="border:2px solid ${c.border}">
+      <div class="csr-modal-title" style="color:${c.title}">${title}</div>
+      <div class="csr-modal-body">${bodyHtml}</div>
+      <div class="csr-modal-btns">
+        <button class="csr-modal-cancel" id="csrModalCancel">Cancel</button>
+        <button class="csr-modal-ok" style="background:${c.btn}" id="csrModalOk">${confirmLabel}</button>
+      </div>
+    </div>`;
+  document.body.appendChild(m);
+  document.getElementById('csrModalOk').onclick=()=>{m.remove();onConfirm();};
+  document.getElementById('csrModalCancel').onclick=()=>{m.remove();if(onCancel)onCancel();};
+  m.addEventListener('click',e=>{if(e.target===m){m.remove();if(onCancel)onCancel();}});
+}
+
+// ══════════════════════════════════════════
+// SCREENSHOT SHARE
+// ══════════════════════════════════════════
+async function shareScreenshot(){
+  const sheetEl=document.querySelector('.sheet-wrap');
+  if(!sheetEl){toast('Sheet not found','error');return;}
+  if(typeof html2canvas==='undefined'){toast('Screenshot library not loaded','error');return;}
+  toast('📸 Capturing screenshot…','info');
+  try{
+    const canvas=await html2canvas(sheetEl,{
+      backgroundColor:'#1C1008',
+      scale:1.5,
+      useCORS:true,
+      logging:false,
+      scrollX:0,
+      scrollY:-window.scrollY,
+      windowWidth:document.documentElement.scrollWidth,
+      windowHeight:document.documentElement.scrollHeight
+    });
+    canvas.toBlob(async blob=>{
+      if(!blob){toast('Screenshot failed','error');return;}
+      const file=new File([blob],'CSR_'+currentDate+'.png',{type:'image/png'});
+      if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+        try{
+          await navigator.share({files:[file],title:'CSR Daily Sheet '+currentDate,text:'Daily sheet for '+currentDate});
+          toast('✅ Shared!','success');
+        }catch(e){
+          if(e.name!=='AbortError') downloadScreenshotCanvas(canvas);
+        }
+      } else {
+        downloadScreenshotCanvas(canvas);
+      }
+    },'image/png');
+  }catch(e){
+    toast('Screenshot error — try again','error');
+    console.error('html2canvas:',e);
+  }
+}
+function downloadScreenshotCanvas(canvas){
+  const a=document.createElement('a');
+  a.download='CSR_'+currentDate+'.png';
+  a.href=canvas.toDataURL('image/png');
+  a.click();
+  toast('📥 Screenshot downloaded!','success');
+}
+
+// ══════════════════════════════════════════
+// OFFLINE INDICATOR
+// ══════════════════════════════════════════
+function updateOnlineStatus(){
+  const b=document.getElementById('offlineBanner');
+  if(b) b.classList.toggle('show',!navigator.onLine);
+}
+window.addEventListener('online',()=>{updateOnlineStatus();toast('✅ Back online — cloud sync restored','success');});
+window.addEventListener('offline',()=>{updateOnlineStatus();toast('📡 Offline — saving locally only','warn');});
+
+// ══════════════════════════════════════════
+// QUICK NOTE CHIPS
+// ══════════════════════════════════════════
+function appendNote(text){
+  if(!editMode){toast('🔒 Unlock sheet to add notes','warn');return;}
+  const ta=document.getElementById('notes');
+  if(!ta)return;
+  const cur=ta.value.trim();
+  ta.value=cur?(cur+'\n'+text):text;
+}
+
+// ══════════════════════════════════════════
+// END-OF-DAY CHECKLIST
+// ══════════════════════════════════════════
+function toggleChk(item){
+  if(!editMode){toast('🔒 Unlock sheet first','warn');return;}
+  const cb=item.querySelector('input[type=checkbox]');
+  if(!cb)return;
+  cb.checked=!cb.checked;
+  item.classList.toggle('checked',cb.checked);
+  saveChecklist();
+}
+function saveChecklist(){
+  const state={};
+  document.querySelectorAll('#chkGrid .chk-item input').forEach(cb=>{state[cb.id]=cb.checked;});
+  try{localStorage.setItem('csrChk_'+BRANCH_ID+'_'+currentDate,JSON.stringify(state));}catch(e){}
+}
+function loadChecklist(){
+  let state={};
+  try{
+    const raw=localStorage.getItem('csrChk_'+BRANCH_ID+'_'+currentDate);
+    if(raw) state=JSON.parse(raw);
+  }catch(e){}
+  document.querySelectorAll('#chkGrid .chk-item').forEach(item=>{
+    const cb=item.querySelector('input');
+    if(!cb)return;
+    const checked=!!(state[cb.id]);
+    cb.checked=checked;
+    item.classList.toggle('checked',checked);
+    cb.disabled=!editMode;
+  });
+}
+
+// ══════════════════════════════════════════
+// MONTH-END PDF
+// ══════════════════════════════════════════
+async function buildMonthPDF(){
+  if(!window._lastAnalyticsDays?.length){toast('Load Analytics first','warn');return;}
+  if(typeof window.jspdf==='undefined'){toast('⚠️ PDF library not loaded yet — try again in a second','warn');return;}
+  const days=window._lastAnalyticsDays;
+  const from=document.getElementById('rangeFrom')?.value||'';
+  const to=document.getElementById('rangeTo')?.value||'';
+  const{jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  const PW=210,PH=297,M=12;
+  let y=0;
+  const fmt=v=>'Rs.'+Math.abs(parseFloat(v)||0).toFixed(0);
+  const addPage=n=>{if(y+n>PH-16){doc.addPage();y=16;}};
+
+  // ── Header ──
+  doc.setFillColor(26,16,8);doc.rect(0,0,PW,28,'F');
+  doc.setFillColor(180,120,0);doc.rect(0,26,PW,1.5,'F');
+  doc.setFont('helvetica','bold');doc.setFontSize(15);doc.setTextColor(245,183,45);
+  doc.text('CSR FAMILY GARDEN RESTAURANT',PW/2,11,{align:'center'});
+  doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(200,200,200);
+  doc.text('Monthly Summary Report — '+from+' to '+to,PW/2,18,{align:'center'});
+  doc.setFontSize(7);doc.setTextColor(160,140,100);
+  doc.text('Generated: '+new Date().toLocaleString('en-IN'),PW/2,23.5,{align:'center'});
+  y=34;
+
+  // ── Summary boxes ──
+  const tS=days.reduce((a,d)=>a+d.tSales,0);
+  const tP=days.reduce((a,d)=>a+d.tPur,0);
+  const tW=days.reduce((a,d)=>a+d.tSal,0);
+  const tF=days.reduce((a,d)=>a+(d.tFree||0),0);
+  const tU=tP+tW;
+  const tN=tS-tU-tF;
+  const profDays=days.filter(d=>d.net>0).length;
+  const lossDays=days.filter(d=>d.net<=0).length;
+  const boxes=[
+    {l:'Total Sales',v:fmt(tS),c:[245,183,45]},
+    {l:'Purchases',v:fmt(tP),c:[248,113,113]},
+    {l:'Salaries',v:fmt(tW),c:[167,139,250]},
+    {l:'Total Usage',v:fmt(tU),c:[251,146,60]},
+    {l:'Net '+(tN>=0?'Profit':'Loss'),v:fmt(tN),c:tN>=0?[74,222,128]:[248,113,113]},
+    {l:'Profit '+profDays+' / Loss '+lossDays,v:days.length+' days',c:[160,140,90]}
+  ];
+  const bw=(PW-M*2-10)/3,bh=18,gap=5;
+  boxes.forEach((b,i)=>{
+    const bx=M+(i%3)*(bw+gap),by=y+Math.floor(i/3)*(bh+4);
+    doc.setFillColor(30,18,4);doc.roundedRect(bx,by,bw,bh,2,2,'F');
+    doc.setFillColor(...b.c);doc.roundedRect(bx,by,bw,0.8,0.4,0.4,'F');
+    doc.setFont('helvetica','normal');doc.setFontSize(5.5);doc.setTextColor(160,140,90);
+    doc.text(b.l,bx+bw/2,by+6,{align:'center'});
+    doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(...b.c);
+    doc.text(b.v,bx+bw/2,by+13,{align:'center'});
+  });
+  y+=46;
+
+  // ── Table ──
+  addPage(20);
+  doc.setFillColor(45,24,0);doc.rect(M,y,PW-M*2,8,'F');
+  doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(255,255,255);
+  doc.text('DAY-BY-DAY BREAKDOWN',M+3,y+5.5);y+=10;
+
+  // cols: [label, width]
+  // j: 0 1 2 3 4 5 6
+  const cols=[['Date',27],['Day',13],['Sales',26],['Purchases',25],['Salaries',22],['Usage',25],['Net',24]];
+
+  let cx=M;
+  doc.setFillColor(55,30,5);doc.rect(M,y,PW-M*2,6,'F');
+  cols.forEach(([l,w],j)=>{
+    doc.setFont('helvetica','bold');doc.setFontSize(6.5);doc.setTextColor(200,160,60);
+    // Date & Day centred, amounts left-aligned
+    if(j<=1){
+      doc.text(l,cx+w/2,y+4.2,{align:'center'});
+    } else {
+      doc.text(l,cx+2,y+4.2,{align:'left'});
+    }
+    cx+=w;
+  });
+  y+=6;
+
+  // Data rows
+  days.forEach((d,i)=>{
+    addPage(6);
+    doc.setFillColor(i%2===0?28:22, i%2===0?16:12, i%2===0?4:2);
+    doc.rect(M,y,PW-M*2,5.5,'F');
+    cx=M;
+    const usage=d.tPur+d.tSal;
+    const vals=[
+      d.date,
+      new Date(d.date+'T00:00:00').toLocaleDateString('en-IN',{weekday:'short'}),
+      'Rs.'+d.tSales.toFixed(0),
+      'Rs.'+d.tPur.toFixed(0),
+      'Rs.'+d.tSal.toFixed(0),
+      'Rs.'+usage.toFixed(0),
+      (d.net>=0?'+':'')+d.net.toFixed(0)
+    ];
+    cols.forEach(([,w],j)=>{
+      doc.setFont('helvetica',j===0?'bold':'normal');doc.setFontSize(7);
+      // j=6 is Net — green/red. j=5 is Usage — orange. rest — light
+      const col = j===6 ? (d.net>=0?[74,222,128]:[248,113,113])
+                : j===5 ? [251,146,60]
+                : [200,180,140];
+      doc.setTextColor(...col);
+      if(j<=1){
+        doc.text(vals[j],cx+w/2,y+3.8,{align:'center'});
+      } else {
+        doc.text(vals[j],cx+2,y+3.8,{align:'left'});
+      }
+      cx+=w;
+    });
+    y+=5.5;
+  });
+
+  // ── Totals row ──
+  addPage(8);
+  doc.setFillColor(45,24,0);doc.rect(M,y,PW-M*2,7,'F');
+  doc.setFillColor(180,120,0);doc.rect(M,y,PW-M*2,0.5,'F');
+  cx=M;
+  const totVals=['TOTAL','','Rs.'+tS.toFixed(0),'Rs.'+tP.toFixed(0),'Rs.'+tW.toFixed(0),'Rs.'+tU.toFixed(0),(tN>=0?'+':'')+tN.toFixed(0)];
+  cols.forEach(([,w],j)=>{
+    doc.setFont('helvetica','bold');doc.setFontSize(7.5);
+    doc.setTextColor(245,183,45);
+    if(j<=1){
+      doc.text(totVals[j],cx+w/2,y+4.5,{align:'center'});
+    } else {
+      doc.text(totVals[j],cx+2,y+4.5,{align:'left'});
+    }
+    cx+=w;
+  });
+  y+=9;
+
+  // ── Footer ──
+  const np=doc.getNumberOfPages();
+  for(let i=1;i<=np;i++){
+    doc.setPage(i);
+    doc.setFillColor(26,16,8);doc.rect(0,PH-12,PW,12,'F');
+    doc.setFont('helvetica','normal');doc.setFontSize(6.5);doc.setTextColor(160,130,80);
+    doc.text('CSR Family Garden Restaurant \u2022 Monthly Report: '+from+' to '+to+' \u2022 Page '+i+' of '+np,PW/2,PH-5,{align:'center'});
+  }
+  doc.save('CSR_Monthly_Report_'+from+'_to_'+to+'.pdf');
+  toast('📄 Monthly PDF downloaded!','success');
+}
+
+// ══════════════════════════════════════════
+// EXPORT XLSX
+// ══════════════════════════════════════════
+function exportXLSX(){
+  if(!window._lastAnalyticsDays?.length){toast('Load Analytics first','warn');return;}
+  if(typeof XLSX==='undefined'){toast('XLSX library not loaded','error');return;}
+  const days=window._lastAnalyticsDays;
+  const from=document.getElementById('rangeFrom')?.value||'';
+  const to=document.getElementById('rangeTo')?.value||'';
+  const wb=XLSX.utils.book_new();
+  // Sheet 1: Day-by-day summary
+  const hdr=['Date','Day','Sales (Rs.)','Purchases (Rs.)','Salaries (Rs.)','Free Bill (Rs.)','Net (Rs.)','UPI (Rs.)','Cash (Rs.)'];
+  const rows=days.map(d=>[
+    d.date,
+    new Date(d.date+'T00:00:00').toLocaleDateString('en-IN',{weekday:'long'}),
+    d.tSales,d.tPur,d.tSal,d.tFree||0,d.net,d.tUPI,d.tCC
+  ]);
+  const totRow=['TOTAL','',
+    days.reduce((a,d)=>a+d.tSales,0),days.reduce((a,d)=>a+d.tPur,0),
+    days.reduce((a,d)=>a+d.tSal,0),days.reduce((a,d)=>a+(d.tFree||0),0),
+    days.reduce((a,d)=>a+d.net,0),days.reduce((a,d)=>a+d.tUPI,0),days.reduce((a,d)=>a+d.tCC,0)
+  ];
+  const ws=XLSX.utils.aoa_to_sheet([hdr,...rows,totRow]);
+  ws['!cols']=[{wch:12},{wch:14},{wch:12},{wch:13},{wch:12},{wch:11},{wch:12},{wch:10},{wch:10}];
+  XLSX.utils.book_append_sheet(wb,ws,'Daily Summary');
+  // Sheet 2: Purchase detail
+  const phdr=['Date','Item','Qty','Unit','Rate','UPI (Rs.)','Cash (Rs.)','Total (Rs.)'];
+  const prows=[];
+  Object.entries(window._lastAnalyticsRaw||{}).sort((a,b)=>a[0].localeCompare(b[0])).forEach(([date,d])=>{
+    (d.purchases||[]).filter(r=>r.en).forEach(r=>{
+      const u=parseFloat(r.upi)||0,c=parseFloat(r.cc)||0;
+      const qty=parseFloat(r.qty)||0,rate=parseFloat(r.rate)||0;
+      prows.push([date,r.en,qty,r.unit||'',rate,u,c,(u+c)||(qty*rate)]);
+    });
+  });
+  if(prows.length){
+    const ws2=XLSX.utils.aoa_to_sheet([phdr,...prows]);
+    ws2['!cols']=[{wch:12},{wch:18},{wch:8},{wch:8},{wch:9},{wch:10},{wch:10},{wch:10}];
+    XLSX.utils.book_append_sheet(wb,ws2,'Purchase Detail');
+  }
+  // Sheet 3: Staff detail
+  const shdr=['Date','Name','Role','Qty','Per Person (Rs.)','UPI (Rs.)','Cash (Rs.)','Total Paid (Rs.)'];
+  const srows=[];
+  Object.entries(window._lastAnalyticsRaw||{}).sort((a,b)=>a[0].localeCompare(b[0])).forEach(([date,d])=>{
+    (d.staff||[]).filter(s=>s.name&&(s.upi||s.cc||s.salary)).forEach(s=>{
+      const u=parseFloat(s.upi)||0,c=parseFloat(s.cc)||0;
+      const qty=parseFloat(s.qty)||1,sal=parseFloat(s.salary)||0;
+      srows.push([date,s.name,s.role||'',qty,sal,u,c,(u+c)||(qty*sal)]);
+    });
+  });
+  if(srows.length){
+    const ws3=XLSX.utils.aoa_to_sheet([shdr,...srows]);
+    ws3['!cols']=[{wch:12},{wch:16},{wch:16},{wch:6},{wch:13},{wch:10},{wch:10},{wch:12}];
+    XLSX.utils.book_append_sheet(wb,ws3,'Staff Detail');
+  }
+  XLSX.writeFile(wb,'CSR_Export_'+from+'_to_'+to+'.xlsx');
+  toast('📊 Excel exported!','success');
+}
+
+// ══════════════════════════════════════════
+// INIT — run once on page load
+// ══════════════════════════════════════════
+window.addEventListener('load',()=>{
+  updateOnlineStatus();
+});
 
 </script>
 </body>
