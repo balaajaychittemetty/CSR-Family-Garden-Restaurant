@@ -351,6 +351,61 @@ tfoot td{background:var(--tfoot)!important;font-family:'DM Mono',monospace;font-
 .notes-sec textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-lt);}
 .notes-sec textarea::placeholder{color:var(--muted);}
 
+/* ══════════════════════════════════════════
+   PRINT STYLES
+══════════════════════════════════════════ */
+@media print {
+  @page { size: A4 portrait; margin: 9mm; }
+  body > *:not(#printSheet) { display: none !important; }
+  #printSheet {
+    display: block !important;
+    font-family: 'Outfit', Arial, sans-serif;
+    font-size: 11px;
+    color: #000;
+    background: #fff;
+    width: 100%;
+  }
+  .pr-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #8B4500; padding-bottom: 6px; margin-bottom: 10px; }
+  .pr-logo { font-size: 36px; }
+  .pr-title { text-align: center; flex: 1; }
+  .pr-title h1 { font-size: 20px; font-weight: 800; color: #5C2D00; margin: 0; }
+  .pr-title p { font-size: 10px; color: #888; margin: 3px 0 0; }
+  .pr-date { text-align: right; }
+  .pr-date .pr-d { font-size: 18px; font-weight: 800; color: #5C2D00; }
+  .pr-date .pr-day { font-size: 11px; color: #888; margin-top: 4px; }
+  .pr-summary { display: flex; gap: 6px; margin: 0 0 10px; }
+  .pr-sbox { flex: 1; border: 1.5px solid #C47A30; border-radius: 6px; padding: 6px 8px; text-align: center; }
+  .pr-sbox .sl { font-size: 8px; color: #888; text-transform: uppercase; letter-spacing: .4px; display: block; }
+  .pr-sbox .sv { font-size: 13px; font-weight: 800; color: #3D1E00; display: block; margin-top: 2px; }
+  .pr-sbox.net-profit { border-color: #16A34A; }
+  .pr-sbox.net-profit .sl, .pr-sbox.net-profit .sv { color: #16A34A; }
+  .pr-sbox.net-loss { border-color: #DC2626; }
+  .pr-sbox.net-loss .sl, .pr-sbox.net-loss .sv { color: #DC2626; }
+  .pr-sbox.pend { border-color: #D97706; }
+  .pr-sbox.pend .sl, .pr-sbox.pend .sv { color: #D97706; }
+  .pr-sec { background: #3D1E00 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; color: #FFD580; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; padding: 4px 10px; margin: 10px 0 0; display: flex; justify-content: space-between; }
+  .pr-tbl { width: 100%; border-collapse: collapse; margin-bottom: 2px; }
+  .pr-tbl th { background: #6B3000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; color: #FFD580; font-size: 9px; font-weight: 700; padding: 4px 6px; text-align: center; border: 1px solid #C47A30; }
+  .pr-tbl th.tl { text-align: left; }
+  .pr-tbl td { padding: 4px 6px; border: 1px solid #DDD; font-size: 10px; text-align: center; }
+  .pr-tbl td.tl { text-align: left; }
+  .pr-tbl tr:nth-child(even) td { background: #FFF8F0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .pr-tbl tfoot td { background: #3D1E00 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; color: #FFD580 !important; font-weight: 800; font-size: 11px; border: 1px solid #8B4500; }
+  .pr-tbl .muted { color: #999; font-style: italic; text-align: center; }
+  .pr-sales-row { display: flex; gap: 8px; margin: 6px 0; }
+  .pr-sales-box { flex: 1; border: 1.5px solid #C47A30; border-radius: 6px; padding: 6px 10px; }
+  .pr-sales-box .sb-lbl { font-size: 8px; color: #888; text-transform: uppercase; letter-spacing: .5px; }
+  .pr-sales-box .sb-val { font-size: 16px; font-weight: 800; color: #3D1E00; margin-top: 2px; }
+  .pr-total-bar { background: #3D1E00 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; color: #FFD580; display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; border-radius: 6px; margin: 4px 0 8px; }
+  .pr-total-bar .tbl { font-size: 10px; font-weight: 700; }
+  .pr-total-bar .tbv { font-size: 16px; font-weight: 800; }
+  .pr-notes { border: 1.5px solid #DDD; border-radius: 6px; padding: 8px 12px; margin-top: 6px; font-size: 11px; color: #333; white-space: pre-wrap; }
+  .pr-footer { margin-top: 10px; border-top: 1px solid #C47A30; padding-top: 5px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; font-size: 8px; color: #888; }
+  .pr-footer .conf { text-align: left; font-style: italic; }
+  .pr-footer .copy { text-align: center; color: #8B4500; font-weight: 700; font-size: 8.5px; }
+  .pr-footer .prnt { text-align: right; }
+}
+
 /* OWNER SUMMARY */
 #ownerPanel{display:none;margin-top:16px;}
 .owner-card{background:linear-gradient(135deg,#0D200D,#172D17);border-radius:14px;overflow:hidden;box-shadow:var(--shadow-lg);border:1px solid rgba(93,224,93,.14);}
@@ -4129,6 +4184,88 @@ window.addEventListener('load',()=>{
   updateOnlineStatus();
 });
 
+// ══════════════════════════════════════════
+// PRINT-FRIENDLY DAILY SHEET
+// ══════════════════════════════════════════
+function printSheet(){
+  const date=document.getElementById('sheetDate')?.textContent||currentDate;
+  const day=document.getElementById('dayBadge')?.textContent||'';
+  const cash=parseFloat(document.getElementById('cashColl')?.value)||0;
+  const upi=parseFloat(document.getElementById('upiColl')?.value)||0;
+  const fb=parseFloat(document.getElementById('freeBill')?.value)||0;
+  const totalSales=cash+upi;
+  const totalPur=parseFloat(document.getElementById('ctAll')?.textContent)||0;
+  const totalSal=parseFloat(document.getElementById('totSalary')?.textContent)||0;
+  const totalUsage=totalPur+totalSal;
+  const net=totalSales-totalUsage-fb;
+  const isProfit=net>=0;
+  const notes=document.getElementById('notes')?.value?.trim()||'';
+  const generated=new Date().toLocaleString('en-IN');
+  const pbSnap=getPBSnap().filter(r=>r.name||r.amount);
+  let pbRows='',pbTotal=0;
+  pbSnap.forEach(r=>{
+    const amt=parseFloat(r.amount)||0; pbTotal+=amt;
+    pbRows+=`<tr><td class="tl">${r.name||'—'}</td><td class="tl">${(r.role||'').split('/')[0].trim()}</td><td class="tl">${r.customer||'—'}</td><td>${r.phone||'—'}</td><td>${r.billNo||'—'}</td><td><strong>₹${amt.toFixed(2)}</strong></td></tr>`;
+  });
+  const purSnap=getSnap();
+  let purRows='';
+  if(purSnap.length){
+    purSnap.forEach((r,i)=>{
+      const qty=parseFloat(r.qty)||0,rate=parseFloat(r.rate)||0,upiA=parseFloat(r.upi)||0,ccA=parseFloat(r.cc)||0,sub=qty*rate,total=upiA+ccA||sub;
+      purRows+=`<tr><td>${i+1}</td><td class="tl">${r.te||''} ${r.en?'('+r.en+')':''}</td><td>${qty||'—'}</td><td>${r.unit||'—'}</td><td>${rate?'₹'+rate.toFixed(2):'—'}</td><td>${sub?'₹'+sub.toFixed(2):'—'}</td><td>${upiA?'₹'+upiA.toFixed(2):'—'}</td><td>${ccA?'₹'+ccA.toFixed(2):'—'}</td><td><strong>₹${total.toFixed(2)}</strong></td></tr>`;
+    });
+  } else { purRows=`<tr><td colspan="9" class="muted">No purchases recorded</td></tr>`; }
+  const staffSnap=getStaffSnap();
+  let staffRows='';
+  if(staffSnap.length){
+    staffSnap.forEach(s=>{
+      const qty=parseFloat(s.qty)||1,sal=parseFloat(s.salary)||0,upiA=parseFloat(s.upi)||0,ccA=parseFloat(s.cc)||0,sub=qty*sal,total=upiA+ccA||sub;
+      staffRows+=`<tr><td class="tl">${s.name||'—'}</td><td class="tl">${(s.role||'').split('/')[0].trim()}</td><td>${qty}</td><td>${sal?'₹'+sal.toFixed(2):'—'}</td><td>${sub?'₹'+sub.toFixed(2):'—'}</td><td>${upiA?'₹'+upiA.toFixed(2):'—'}</td><td>${ccA?'₹'+ccA.toFixed(2):'—'}</td><td><strong>₹${total.toFixed(2)}</strong></td></tr>`;
+    });
+  } else { staffRows=`<tr><td colspan="8" class="muted">No salaries recorded</td></tr>`; }
+
+  const el=document.getElementById('printSheet');
+  el.innerHTML=`
+    <div class="pr-header">
+      <div class="pr-logo">🕉️</div>
+      <div class="pr-title"><h1>CSR Family Garden Restaurant</h1><p>Daily Purchase &amp; Sales Register</p></div>
+      <div class="pr-date"><div class="pr-d">${date}</div><div class="pr-day">${day}</div></div>
+    </div>
+    <div class="pr-summary">
+      <div class="pr-sbox"><span class="sl">💰 Sales</span><span class="sv">₹${totalSales.toFixed(2)}</span></div>
+      <div class="pr-sbox"><span class="sl">🛒 Purchases</span><span class="sv">₹${totalPur.toFixed(2)}</span></div>
+      <div class="pr-sbox"><span class="sl">👥 Salaries</span><span class="sv">₹${totalSal.toFixed(2)}</span></div>
+      <div class="pr-sbox"><span class="sl">💸 Total Usage</span><span class="sv">₹${totalUsage.toFixed(2)}</span></div>
+      <div class="pr-sbox ${isProfit?'net-profit':'net-loss'}"><span class="sl">${isProfit?'📈 Net Profit':'📉 Net Loss'}</span><span class="sv">₹${Math.abs(net).toFixed(2)}</span></div>
+      ${pbTotal>0?`<div class="pr-sbox pend"><span class="sl">⚠️ Pending</span><span class="sv">₹${pbTotal.toFixed(2)}</span></div>`:''}
+    </div>
+    <div class="pr-sec"><span>🛒 Purchases — కొనుగోళ్ళు</span><span>Total: ₹${totalPur.toFixed(2)}</span></div>
+    <table class="pr-tbl"><thead><tr><th style="width:24px">#</th><th class="tl">Item / వివరాలు</th><th>Qty</th><th>Unit</th><th>Rate ₹</th><th>Subtotal ₹</th><th>UPI ₹</th><th>Cash ₹</th><th>Total ₹</th></tr></thead><tbody>${purRows}</tbody><tfoot><tr><td colspan="8" style="text-align:left;padding-left:10px">Column Totals / మొత్తం</td><td>₹${totalPur.toFixed(2)}</td></tr></tfoot></table>
+    <div class="pr-sec"><span>💰 Sales / Collection — అమ్మకాలు</span><span>Total: ₹${totalSales.toFixed(2)}</span></div>
+    <div class="pr-sales-row">
+      <div class="pr-sales-box"><div class="sb-lbl">💵 Cash Collection</div><div class="sb-val">₹${cash.toFixed(2)}</div></div>
+      <div class="pr-sales-box"><div class="sb-lbl">📱 UPI / PhonePay</div><div class="sb-val">₹${upi.toFixed(2)}</div></div>
+      ${fb>0?`<div class="pr-sales-box"><div class="sb-lbl">🆓 Free Bill (Comp)</div><div class="sb-val">₹${fb.toFixed(2)}</div></div>`:''}
+    </div>
+    <div class="pr-total-bar"><span class="tbl">Total Collection (Cash + UPI)</span><span class="tbv">₹${totalSales.toFixed(2)}</span></div>
+    <div class="pr-sec"><span>👨‍🍳 Staff Salaries — సిబ్బంది జీతాలు</span><span>Total: ₹${totalSal.toFixed(2)}</span></div>
+    <table class="pr-tbl"><thead><tr><th class="tl">Name</th><th class="tl">Role</th><th>Qty</th><th>Per Person ₹</th><th>Subtotal ₹</th><th>UPI ₹</th><th>Cash ₹</th><th>Total Paid ₹</th></tr></thead><tbody>${staffRows}</tbody><tfoot><tr><td colspan="7" style="text-align:left;padding-left:10px">Total Salaries Paid</td><td>₹${totalSal.toFixed(2)}</td></tr></tfoot></table>
+    <div class="pr-sec"><span>⚠️ Pending Bills — బకాయి బిల్లులు</span><span>Total: ₹${pbTotal.toFixed(2)}</span></div>
+    <table class="pr-tbl"><thead><tr><th class="tl">Name</th><th class="tl">Role</th><th class="tl">Customer</th><th>Phone</th><th>Bill No</th><th>Amount ₹</th></tr></thead><tbody>${pbRows||`<tr><td colspan="6" class="muted">No pending bills</td></tr>`}</tbody><tfoot><tr><td colspan="5" style="text-align:left;padding-left:10px">Total Pending</td><td>₹${pbTotal.toFixed(2)}</td></tr></tfoot></table>
+    <div class="pr-sec"><span>📝 Notes — గమనికలు</span></div>
+    <div class="pr-notes">${notes||'—'}</div>
+    <div class="pr-footer">
+      <span class="conf">Confidential — Internal Use Only</span>
+      <span class="copy">© 2026 CSR Family Garden Restaurant · CH. B.A.S.K · All Rights Reserved</span>
+      <span class="prnt">Printed: ${generated}</span>
+    </div>`;
+
+  window.onafterprint=()=>{ el.innerHTML=''; };
+  setTimeout(()=>window.print(),150);
+}
+
 </script>
+<!-- ══ PRINT SHEET (hidden, only visible during print) ══ -->
+<div id="printSheet" style="display:none"></div>
 </body>
 </html>
