@@ -3637,37 +3637,40 @@ function exportFinanceCSV(){
 function shareWhatsApp(){
   const date=document.getElementById('sheetDate')?.textContent||currentDate;
   const day=document.getElementById('dayBadge')?.textContent||'';
-  const sales=document.getElementById('totalSales')?.textContent||'0';
-  const pur=document.getElementById('ctAll')?.textContent||'0';
-  const sal=document.getElementById('totSalary')?.textContent||'0';
-  const net=document.getElementById('op_net')?.textContent||'0';
-  const netLbl=document.getElementById('op_net_lbl')?.textContent||'Net';
-  const cash=document.getElementById('cashColl')?.value||'0';
-  const upi=document.getElementById('upiColl')?.value||'0';
-  const fb=parseFloat(document.getElementById('freeBill')?.value||0);
-  const usage=(parseFloat(pur)+parseFloat(sal)).toFixed(2);
-  const pend=document.getElementById('op_pend')?.textContent||'0';
-  const notes=document.getElementById('notes')?.value?.trim();
-  const isProfit=netLbl.toLowerCase().includes('profit');
+  const cash=parseFloat(document.getElementById('cashColl')?.value)||0;
+  const upi=parseFloat(document.getElementById('upiColl')?.value)||0;
+  const fb=parseFloat(document.getElementById('freeBill')?.value)||0;
+  const sales=cash+upi;
+  const pur=parseFloat(document.getElementById('ctAll')?.textContent)||0;
+  const sal=parseFloat(document.getElementById('totSalary')?.textContent)||0;
+  const usage=pur+sal;
+  const net=sales-usage-fb;
+  const isProfit=net>=0;
+  const pbSnap=getPBSnap().filter(r=>r.name||r.amount);
+  const pend=pbSnap.reduce((a,r)=>a+(parseFloat(r.amount)||0),0);
+  const notes=document.getElementById('notes')?.value?.trim()||'';
+  const f=v=>'₹'+v.toFixed(2);
   const msg=
 `🏡 *CSR Family Garden Restaurant*
 🗓️ ${date}${day?' ('+day+')':''}
 ${'─'.repeat(30)}
-💰 *SALES:*
-   💵 Cash : ₹${parseFloat(cash).toFixed(2)}
-   📱 UPI  : ₹${parseFloat(upi).toFixed(2)}
-   📊 Total: ₹${sales}
-  ${fb>0?` 🎁 Free Bill: ₹${fb.toFixed(2)}\n`:''}${'─'.repeat(30)}
+💰 *SALES*
+   💵 Cash: ${f(cash)}
+   📱 UPI   : ${f(upi)}
+   📊 Total: ${f(sales)}
+  ${fb>0?' 🎁 Free Bill: '+f(fb):''}
+${'─'.repeat(30)}
 💸 *EXPENSES*
-   🛒 Purchases  : ₹${pur}
-   👥 Salaries   : ₹${sal}
-   💸 Total Usage: ₹${usage}
-  ${parseFloat(pend)>0?` ⚠️ *Pending Bills:* ₹${pend}\n`:''}${'─'.repeat(30)}
-${isProfit?'📈':'📉'} *${netLbl.toUpperCase()}: ₹${net}*
+   🛒 Purchases  : ${f(pur)}
+   👥 Salaries     : ${f(sal)}
+   💸 Total Usage: ${f(usage)}
+  ${pend>0?' ⚠️ Pending Bills: '+f(pend):''}
+${'─'.repeat(30)}
+${isProfit?'📈':'📉'} *NET ${isProfit?'PROFIT':'LOSS'}: ${f(Math.abs(net))}*
 ${'─'.repeat(30)}${notes?'\n📝 *Notes:* '+notes:''}
 
 _Sent from Restaurant Management System_
- _© 2026 All Rights Reserved · CH. B.A.S.K_`;
+   _© 2026 All Rights Reserved · CH. B.A.S.K_`;
   window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
 }
 
