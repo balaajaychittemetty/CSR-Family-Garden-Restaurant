@@ -1,6 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- PWA Meta Tags -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CSR Manager">
+<meta name="application-name" content="CSR Manager">
+<meta name="theme-color" content="#1C1008">
+<meta name="msapplication-TileColor" content="#1C1008">
+<meta name="msapplication-TileImage" content="icons/icon-144x144.png">
+
+<!-- PWA Manifest -->
+<link rel="manifest" href="manifest.json">
+
+<!-- Apple Touch Icons -->
+<link rel="apple-touch-icon" href="icons/icon-152x152.png">
+<link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192x192.png">
+  
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CSR Family Garden Restaurant</title>
@@ -677,20 +694,6 @@ canvas{width:100%!important;display:block;}
 
           <div class="sheet-div"></div>
 
-          <!-- SALES / COLLECTION -->
-          <div class="sec-hd"><h3>💰 Sales / Collection — అమ్మకాలు</h3><span class="sec-meta">Total: ₹<span id="salMeta">0.00</span></span></div>
-          <div class="sales-grid">
-            <div class="sf cash"><label>💵 Cash Collection ₹</label><input type="number" id="cashColl" placeholder="0.00" min="0" oninput="calcSales()" readonly></div>
-            <div class="sf upi"><label>📱 UPI / PhonePay ₹</label><input type="number" id="upiColl" placeholder="0.00" min="0" oninput="calcSales()" readonly></div>
-            <div class="sf spent"><label>🆓 Free Bill ₹ <small style="font-size:9px;opacity:.7">(Police/Comp)</small></label><input type="number" id="freeBill" placeholder="0.00" min="0" oninput="calcSales()" readonly></div>
-          </div>
-          <div class="sales-total">
-            <div><div class="st-lbl">Total Collection (Cash + UPI)</div><div class="st-sub" id="salBreak">Cash: ₹0 + UPI: ₹0</div></div>
-            <div class="st-val">₹<span id="totalSales">0.00</span></div>
-          </div>
-
-          <div class="sheet-div"></div>
-
           <!-- STAFF SALARIES — with Qty, per-person salary, UPI/CC/CSR, Total -->
           <div class="sec-hd"><h3>👨‍🍳 Staff Salaries — సిబ్బంది జీతాలు</h3><span class="sec-meta">Total: ₹<span id="strMeta">0.00</span></span></div>
           <div class="staff-sec">
@@ -752,6 +755,20 @@ canvas{width:100%!important;display:block;}
           <div class="add-row-bar">
             <button class="add-row-btn" id="addPBBtn" onclick="addPendingBillRow()" disabled>＋ Add Pending Bill</button>
           </div>
+          </div>
+
+          <div class="sheet-div"></div>
+
+          <!-- SALES / COLLECTION -->
+          <div class="sec-hd"><h3>💰 Sales / Collection — అమ్మకాలు</h3><span class="sec-meta">Total: ₹<span id="salMeta">0.00</span></span></div>
+          <div class="sales-grid">
+            <div class="sf cash"><label>💵 Cash Collection ₹</label><input type="number" id="cashColl" placeholder="0.00" min="0" oninput="calcSales()" readonly></div>
+            <div class="sf upi"><label>📱 UPI / PhonePay ₹</label><input type="number" id="upiColl" placeholder="0.00" min="0" oninput="calcSales()" readonly></div>
+            <div class="sf spent"><label>🆓 Free Bill ₹ <small style="font-size:9px;opacity:.7">(Police/Comp)</small></label><input type="number" id="freeBill" placeholder="0.00" min="0" oninput="calcSales()" readonly></div>
+          </div>
+          <div class="sales-total">
+            <div><div class="st-lbl">Total Collection (Cash + UPI)</div><div class="st-sub" id="salBreak">Cash: ₹0 + UPI: ₹0</div></div>
+            <div class="st-val">₹<span id="totalSales">0.00</span></div>
           </div>
 
           <div class="sheet-div"></div>
@@ -4267,5 +4284,14 @@ function printSheet(){
 </script>
 <!-- ══ PRINT SHEET (hidden, only visible during print) ══ -->
 <div id="printSheet" style="display:none"></div>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('./sw.js')
+      .then(r => console.log('CSR SW registered:', r.scope))
+      .catch(e => console.log('CSR SW error:', e));
+  });
+}
+</script>
 </body>
 </html>
