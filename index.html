@@ -361,6 +361,18 @@ tfoot td{background:var(--tfoot)!important;font-family:'DM Mono',monospace;font-
 .salary-bar{margin-top:11px;padding:10px 15px;background:var(--green-bg);border:1px solid rgba(26,92,26,.18);border-radius:8px;display:flex;justify-content:space-between;align-items:center;}
 .salary-bar .sl{font-size:11px;color:var(--green-txt);font-weight:700;}
 .salary-bar .sv{font-family:'DM Mono',monospace;font-size:16px;font-weight:700;color:var(--green-txt);}
+.grand-bar{margin:4px 0 0;background:var(--head-bg);border-radius:9px;border:1px solid rgba(200,104,10,.28);box-shadow:0 3px 14px rgba(0,0,0,.18);overflow:hidden;}
+.grand-bar-title{padding:6px 18px 5px;font-size:9px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,.06);}
+.grand-bar-cols{display:flex;align-items:stretch;}
+.grand-bar-col{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 6px;gap:3px;border-right:1px solid rgba(255,255,255,.06);}
+.grand-bar-col:last-child{border-right:none;}
+.grand-bar-col.hl{background:rgba(245,183,45,.05);}
+.gb-lbl{font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;}
+.gb-val{font-family:'DM Mono',monospace;font-size:14px;font-weight:800;}
+.gb-val.gold{color:var(--gold);}
+.gb-val.blue{color:#A8C8FF;}
+.gb-val.amber{color:#FFD08A;}
+.gb-val.orange{color:#FFBB78;font-size:16px;}
 
 /* NOTES */
 .notes-sec{padding:12px 18px;}
@@ -722,7 +734,37 @@ canvas{width:100%!important;display:block;}
               </table>
             </div>
             <button class="staff-add" id="addStaffBtn" onclick="addStaff()" disabled>＋ Add Staff Member</button>
-            <div class="salary-bar"><span class="sl">Total Salaries Paid / మొత్తం జీతాలు</span><span class="sv">₹<span id="totSalary">0.00</span></span></div>
+           
+			<span id="totSalary" style="display:none">0.00</span>
+            <div class="grand-bar">
+              <div class="grand-bar-title">⚡ Grand Total — Purchases + Salaries</div>
+              <div class="grand-bar-cols">
+                <div class="grand-bar-col">
+                  <div class="gb-lbl">🛒 Purchases</div>
+                  <div class="gb-val gold" id="gt_pur">₹0.00</div>
+                </div>
+                <div class="grand-bar-col">
+                  <div class="gb-lbl">👥 Salaries</div>
+                  <div class="gb-val gold" id="gt_sal">₹0.00</div>
+                </div>
+                <div class="grand-bar-col hl">
+                  <div class="gb-lbl">💸 Total Usage</div>
+                  <div class="gb-val orange" id="gt_usage">₹0.00</div>
+                </div>
+                <div class="grand-bar-col">
+                  <div class="gb-lbl">📱 UPI Total</div>
+                  <div class="gb-val blue" id="gt_upi">₹0.00</div>
+                </div>
+                <div class="grand-bar-col">
+                  <div class="gb-lbl">💵 Cash Total</div>
+                  <div class="gb-val amber" id="gt_cc">₹0.00</div>
+                </div>
+                <div class="grand-bar-col hl">
+                  <div class="gb-lbl">✅ Total Paid</div>
+                  <div class="gb-val orange" id="gt_paid">₹0.00</div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="sheet-div"></div>
@@ -1419,6 +1461,7 @@ function calcTotals(){
     tU+=upi;tC+=cc;tA+=rowTot;
   });
   set('ctUPI',tU);set('ctCC',tC);set('ctAll',tA);set('purMeta',tA);set('qb_pur',tA);
+  updateGrandTotal();
   updateOwner();
 }
 function delPRow(btn){btn.closest('tr').remove();renum();calcTotals();}
@@ -1497,6 +1540,7 @@ function calcStaffTotals(){
   });
   set('stSub',tSub);set('stUPI',tU);set('stCC',tC);set('stAll',tA);
   set('totSalary',tA);set('strMeta',tA);set('qb_sal',tA);
+  updateGrandTotal();
   updateOwner();
 }
 
@@ -4297,6 +4341,24 @@ if('serviceWorker' in navigator){
       .catch(e => console.log('CSR SW error:', e));
   });
 }
+
+function updateGrandTotal(){
+  const pur=parseFloat(document.getElementById('ctAll')?.textContent)||0;
+  const purUPI=parseFloat(document.getElementById('ctUPI')?.textContent)||0;
+  const purCC=parseFloat(document.getElementById('ctCC')?.textContent)||0;
+  const sal=parseFloat(document.getElementById('stAll')?.textContent)||0;
+  const salUPI=parseFloat(document.getElementById('stUPI')?.textContent)||0;
+  const salCC=parseFloat(document.getElementById('stCC')?.textContent)||0;
+  const el=document.getElementById('gt_pur');
+  if(!el)return;
+  el.textContent='₹'+pur.toFixed(2);
+  document.getElementById('gt_sal').textContent='₹'+sal.toFixed(2);
+  document.getElementById('gt_usage').textContent='₹'+(pur+sal).toFixed(2);
+  document.getElementById('gt_upi').textContent='₹'+(purUPI+salUPI).toFixed(2);
+  document.getElementById('gt_cc').textContent='₹'+(purCC+salCC).toFixed(2);
+  document.getElementById('gt_paid').textContent='₹'+(pur+sal).toFixed(2);
+}
+
 </script>
 </body>
 </html>
