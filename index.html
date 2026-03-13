@@ -3129,7 +3129,12 @@ function addPendingBillRow(data){
     <td class="td-u"><input class="ci" type="number" value="${data.amount||''}" placeholder="0.00" min="0" step="0.5" ${ro_} oninput="updatePBTotals()"></td>
     <td><button class="del-btn" onclick="this.closest('tr').remove();updatePBTotals()" ${editMode?'':'disabled'}>✕</button></td>
   `;
-  document.getElementById('pbTbody').appendChild(tr);
+  const tbody=document.getElementById('pbTbody');
+  // Clear placeholder row if present
+  if(tbody.rows.length===1 && !tbody.rows[0].querySelector('input')){
+    tbody.innerHTML='';
+  }
+  tbody.appendChild(tr);
 }
 
 // ══════════════════════════════════════════
