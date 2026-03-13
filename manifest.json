@@ -1,6 +1,6 @@
 {
   "name": "CSR Family Garden Restaurant",
-  "short_name": "CSR Manager",
+  "short_name": "CSR Management System",
   "description": "Daily purchase, sales and staff management for CSR Family Garden Restaurant",
   "start_url": "./",
   "display": "standalone",
